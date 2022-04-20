@@ -18,7 +18,7 @@ class Play extends Phaser.Scene {
 
         this.terrainRange = 0; // number that will be checked 
 
-        this.distanceTraveled = 0;
+        this.distanceTraveled = 0; //distance
 
         // player stats
         this.seedsDropped = 0;
@@ -32,13 +32,12 @@ class Play extends Phaser.Scene {
 
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
-        this.player = this.physics.add.sprite(100, 200, 'dandy',0);
-<<<<<<< HEAD
+        this.player = this.physics.add.sprite(config.width/2, config.height/2, 'dandy',0);
+
         //this.player.setGravityY(125); // gravity strength
-=======
-        this.player.setGravityY(0); // gravity strength
->>>>>>> 984a2fcbb24c45d2bd796b52fafb36a2bd53d365
-        
+
+        this.player.setGravityY(0); // gravity strength. 5 is good
+  
 
         // terrain types
         this.ground = this.physics.add.sprite(320,720, 'ground',0);
@@ -47,8 +46,10 @@ class Play extends Phaser.Scene {
        
         this.add.text(20,20, "Play scene");
         this.playerScore = this.add.text(150, 20, this.score);
+        this.add.text(300,20, "Distance");
+        this.distanceText = this.add.text(440, 20, this.distanceTraveled);
 
-        
+
     }
 
     update() {
@@ -63,12 +64,11 @@ class Play extends Phaser.Scene {
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
                 this.dropCoolDown -= 1;
-            }
+            }//end if
 
-
+            this.distanceTraveled += 0.01;
+            this.distanceText.text = this.distanceTraveled;
         }
-
-
 
         // when player presses space a seed drops
         //added cooldown for whenever pressed it's set to a value
@@ -88,11 +88,6 @@ class Play extends Phaser.Scene {
             this.playerScore.text = this.score;
             this.seed.destroy();
         }
-
-        
-
-        
-
         // detecting seed collision with the ground
 
     }
