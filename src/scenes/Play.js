@@ -9,12 +9,20 @@ class Play extends Phaser.Scene {
         this.load.image('seed', './assets/placeHolder_seed.png');
         this.load.image('water', './assets/placeHolder_water.png');
         this.load.image('ground', './assets/placeHolder_ground.png');
+        this.load.image('wind', './assets/placeHolder_clickWind.png');
     }
 
     create () {
 
+        // mouse stuff
+        this.input.mouse.capture = true;
+        this.input.setDefaultCursor('url(./assets/placeHolder_windMouse.png), pointer');
+
+        
+
         this.gameOver = false; // to tell if game is over or not
         this.seedDroppped = false;
+        this.windPlaced = false;
 
         this.terrainRange = 0; // number that will be checked 
 
@@ -26,17 +34,17 @@ class Play extends Phaser.Scene {
         this.score = 0;
 
         this.dropCoolDown = 0;
+        this.windCoolDown = 0;
 
         // defining keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
-        this.player = this.physics.add.sprite(config.width/2, config.height/2, 'dandy',0);
-
-        //this.player.setGravityY(125); // gravity strength
-
+        this.player = this.physics.add.sprite(config.width/3, config.height/2, 'dandy',0);
         this.player.setGravityY(0); // gravity strength. 5 is good
+        this.player.setBounce(0.5, 0.5);
+        this.player.setVelocity(0,0);
   
 
         // terrain types
@@ -48,8 +56,7 @@ class Play extends Phaser.Scene {
         this.playerScore = this.add.text(150, 20, this.score);
         this.add.text(300,20, "Distance");
         this.distanceText = this.add.text(440, 20, this.distanceTraveled);
-
-
+        
     }
 
     update() {
@@ -58,53 +65,60 @@ class Play extends Phaser.Scene {
             this.gameOver = true;
         }
 
-        // starting position of the dandelion
-        if (!this.gameOver) {
+        if (this.gameOver != true) {
 
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
                 this.dropCoolDown -= 1;
             }//end if
 
+            if (this.windCoolDown > 0) {
+                this.windCoolDown -= 1;
+            }
+
+            // calculating distance and displaying it
             this.distanceTraveled += 0.01;
             this.distanceText.text = this.distanceTraveled;
+
+            // when player presses space a seed drops
+            //added cooldown for whenever pressed it's set to a value
+            if (Phaser.Input.Keyboard.JustDown(keySpace) && this.dropCoolDown <= 0) {
+                this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed', 0); 
+                this.seedDroppped = true;
+                this.seed.setGravityY(135);
+                this.dropCoolDown = 300;
+                console.log(this.dropCoolDown);
+            }
+
+            // still needs more tweaking
+            if (this.seedDroppped && this.seed.y >= 700) {
+                this.seedDroppped = false;
+                this.score += 100;
+                this.playerHealth -= 1;
+                this.playerScore.text = this.score;
+                this.seed.destroy();
+            }
+
+            if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
+                this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
+                //this.wind.setCircle(15);
+                this.windCoolDown = 200;
+                this.windPlaced = true;
+
+                this.physics.add.overlap(this.wind, this.player, this.collisionDandelion(this.player));
+
+            }
+
         }
 
-        // when player presses space a seed drops
-        //added cooldown for whenever pressed it's set to a value
-        if (Phaser.Input.Keyboard.JustDown(keySpace) && this.dropCoolDown <= 0) {
-            this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed', 0); 
-            this.seedDroppped = true;
-            this.seed.setGravityY(125);
-            this.dropCoolDown = 300;
-            console.log(this.dropCoolDown);
-        }
-
-        // still needs more tweaking
-        if (this.seedDroppped && this.seed.y >= 700) {
-            this.seedDroppped = false;
-            this.score += 100;
-            this.playerHealth -= 1;
-            this.playerScore.text = this.score;
-            this.seed.destroy();
-        }
-        // detecting seed collision with the ground
 
     }
 
-    // these do no work :(
-    groundCollision (seed, ground) {
-        //seed.destroy();
-        this.score += 100;
-        this.playerScore.text = this.score;
-        this.playerHealth -= 1;
+    // still needs work
+    collisionDandelion(player) {
+        player.body.velocity.x = 20;
+        player.body.velocity.y = -30;
     }
-
-    waterCollision (seed, water) {
-        //seed.destroy();
-        this.playerHealth -= 1;
-    }
-
 
 
 
