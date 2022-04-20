@@ -105,6 +105,7 @@ class Play extends Phaser.Scene {
                 this.windCoolDown = 200;
                 this.windPlaced = true;
 
+                // nvm this does not work </3
                 this.physics.add.overlap(this.wind, this.player, this.collisionDandelion(this.player));
 
             }
