@@ -1,6 +1,6 @@
 ## Game title: How Dandy
 
-### Collaborator:
+### Collaborators:
 - Andrew Dresel-Kurtz
 - Jane Tran
 - Ashley Perez

@@ -7,7 +7,10 @@ let config = {
 
     // phaser arcade physic engine
     physics: {
-        default: "arcade"
+        default: "arcade",
+        arcade: {
+            debug: true
+        }
     }
 }
 
