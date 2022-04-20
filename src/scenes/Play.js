@@ -22,13 +22,15 @@ class Play extends Phaser.Scene {
         this.playerHealth = 10;
         this.score = 0;
 
+        this.dropCoolDown = 0;
+
         // defining keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
         this.player = this.physics.add.sprite(100, 200, 'dandy',0);
-        this.player.setGravityY(125); // gravity strength
+        this.player.setGravityY(0); // gravity strength
         
 
         // terrain types
@@ -51,13 +53,24 @@ class Play extends Phaser.Scene {
         
         // starting position of the dandelion
         if (!this.gameOver) {
+
+            //while the cool down is not reset to 0, keep removing the value
+            if (this.dropCoolDown > 0) {
+                this.dropCoolDown -= 1;
+            }
+
+
         }
 
+
+
         // when player presses space a seed drops
-        // still need to add a cooldown
-        if (Phaser.Input.Keyboard.JustDown(keySpace)) {
+        //added cooldown for whenever pressed it's set to a value
+        if (Phaser.Input.Keyboard.JustDown(keySpace) && this.dropCoolDown <= 0) {
             this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed', 0); 
             this.seed.setGravityY(125);
+            this.dropCoolDown = 300;
+            console.log(this.dropCoolDown);
         }
 
         
