@@ -14,6 +14,9 @@ class Play extends Phaser.Scene {
     create () {
 
         this.gameOver = false; // to tell if game is over or not
+        this.seedDroppped = false;
+
+        this.terrainRange = 0; // number that will be checked 
 
         this.distanceTraveled = 0;
 
@@ -28,7 +31,7 @@ class Play extends Phaser.Scene {
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
         this.player = this.physics.add.sprite(100, 200, 'dandy',0);
-        this.player.setGravityY(125); // gravity strength
+        //this.player.setGravityY(125); // gravity strength
         
 
         // terrain types
@@ -39,16 +42,15 @@ class Play extends Phaser.Scene {
         this.add.text(20,20, "Play scene");
         this.playerScore = this.add.text(150, 20, this.score);
 
-        // if (this.physics.add.overlap(this.seed,this.ground)) {
-        //     this.groundCollision(this.seed, this.ground);
-        // }
-        // else if (this.physics.add.overlap(this.seed, this.water)) {
-        //     this.waterCollision(this.seed, this.water);
-        // }
+        
     }
 
     update() {
         
+        if (this.playerHealth == 0) {
+            this.gameOver = true;
+        }
+
         // starting position of the dandelion
         if (!this.gameOver) {
         }
@@ -57,7 +59,17 @@ class Play extends Phaser.Scene {
         // still need to add a cooldown
         if (Phaser.Input.Keyboard.JustDown(keySpace)) {
             this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed', 0); 
+            this.seedDroppped = true;
             this.seed.setGravityY(125);
+        }
+
+        // still needs more tweaking
+        if (this.seedDroppped && this.seed.y >= 700) {
+            this.seedDroppped = false;
+            this.score += 100;
+            this.playerHealth -= 1;
+            this.playerScore.text = this.score;
+            this.seed.destroy();
         }
 
         
