@@ -42,9 +42,9 @@ class Play extends Phaser.Scene {
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
         this.player = this.physics.add.sprite(config.width/3, config.height/2, 'dandy',0);
-        this.player.setGravityY(0); // gravity strength. 5 is good
+        this.player.setGravityY(100); // gravity strength. 5 is good
         this.player.setBounce(0.5, 0.5);
-        this.player.setVelocity(0,0);
+        this.player.setVelocity(1,1);
   
 
         // terrain types
@@ -106,7 +106,17 @@ class Play extends Phaser.Scene {
                 this.windPlaced = true;
 
                 // nvm this does not work </3
-                this.physics.add.overlap(this.wind, this.player, this.collisionDandelion(this.player));
+                //this.physics.add.overlap(this.wind, this.player, this.collisionDandelion(this.player));
+
+                // moving the dandelion in the opposite direction of the mouse click
+                if (this.player.y < this.input.activePointer.position.y+18) {
+                    this.player.body.velocity.x = 50;
+                    this.player.body.velocity.y = -150; // negative y values go up
+                }
+                else {
+                    this.player.body.velocity.x = 60;
+                    this.player.body.velocity.y = 75;  // positive y values go down
+                }
 
             }
 
