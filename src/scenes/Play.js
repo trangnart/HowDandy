@@ -42,7 +42,7 @@ class Play extends Phaser.Scene {
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
         this.player = this.physics.add.sprite(config.width/3, config.height/2, 'dandy',0);
-        this.player.setGravityY(100); // gravity strength. 5 is good
+        this.player.setGravityY(70); // gravity strength. 5 is good
         this.player.setBounce(0.5, 0.5);
         this.player.setVelocity(1,1);
   
@@ -102,22 +102,36 @@ class Play extends Phaser.Scene {
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
                 //this.wind.setCircle(15);
-                this.windCoolDown = 200;
+                this.windCoolDown = 100;
                 this.windPlaced = true;
 
                 // nvm this does not work </3
                 //this.physics.add.overlap(this.wind, this.player, this.collisionDandelion(this.player));
 
                 // moving the dandelion in the opposite direction of the mouse click
-                if (this.player.y < this.input.activePointer.position.y+18) {
-                    this.player.body.velocity.x = 50;
-                    this.player.body.velocity.y = -150; // negative y values go up
-                    console.log("first if = go up bc mouse is below");
+                this.mouseY = this.input.activePointer.position.y + 18; 
+                this.mouseX = this.input.activePointer.position.x + 18;
+
+                // this.player.y < this.mouseY
+                // if (this.player.y < this.mouseY) {
+                //     this.player.body.velocity.x = 50;
+                //     this.player.body.velocity.y = -150; // negative y values go up
+                //     console.log("first if = go up bc mouse is below");
+                // }
+                if (Math.abs(this.player.y - this.mouseY) >= 0 && Math.abs(this.player.y - this.mouseY) <= 40 && (Math.abs(this.player.x - this.mouseX) >= 10 && (Math.abs(this.player.x - this.mouseX) <= 50))) {
+                    this.player.body.velocity.x = -85;
+                    this.player.body.velocity.y = 20;
+                    console.log("first if = go backwards when mouse is ahead of dandelion");
                 }
-                else if (Math.abs(this.player.y - this.input.activePointer.position.y) >= 0 && Math.abs(this.player.y - this.input.activePointer.position.y) <= 40) {
+                else if (Math.abs(this.player.y - this.mouseY) >= 0 && Math.abs(this.player.y - this.mouseY) <= 40 && (Math.abs(this.player.x - this.mouseX) >= 0 && (Math.abs(this.player.x - this.mouseX) <= 40))) {
                     this.player.body.velocity.x = 70;
                     this.player.body.velocity.y = 20;
                     console.log("second if = go to the side bc mouse is next to");
+                }
+                else if (this.player.y < this.mouseY) {
+                    this.player.body.velocity.x = 50;
+                    this.player.body.velocity.y = -150; // negative y values go up
+                    console.log("third if = go up bc mouse is below");
                 }
                 else {
                     this.player.body.velocity.x = 60;
