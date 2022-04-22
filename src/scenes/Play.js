@@ -112,10 +112,17 @@ class Play extends Phaser.Scene {
                 if (this.player.y < this.input.activePointer.position.y+18) {
                     this.player.body.velocity.x = 50;
                     this.player.body.velocity.y = -150; // negative y values go up
+                    console.log("first if = go up bc mouse is below");
+                }
+                else if (Math.abs(this.player.y - this.input.activePointer.position.y) >= 0 && Math.abs(this.player.y - this.input.activePointer.position.y) <= 40) {
+                    this.player.body.velocity.x = 70;
+                    this.player.body.velocity.y = 20;
+                    console.log("second if = go to the side bc mouse is next to");
                 }
                 else {
                     this.player.body.velocity.x = 60;
                     this.player.body.velocity.y = 75;  // positive y values go down
+                    console.log("last conditional = go down bc mouse is above");
                 }
 
             }
