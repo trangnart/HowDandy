@@ -101,12 +101,8 @@ class Play extends Phaser.Scene {
 
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
-                //this.wind.setCircle(15);
                 this.windCoolDown = 100;
                 this.windPlaced = true;
-
-                // nvm this does not work </3
-                //this.physics.add.overlap(this.wind, this.player, this.collisionDandelion(this.player));
 
                 // moving the dandelion in the opposite direction of the mouse click
                 this.mouseY = this.input.activePointer.position.y + 18; 
