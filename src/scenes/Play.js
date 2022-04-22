@@ -42,7 +42,7 @@ class Play extends Phaser.Scene {
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
         this.player = this.physics.add.sprite(config.width/3, config.height/2, 'dandy',0);
-        this.player.setGravityY(70); // gravity strength. 5 is good
+        this.player.setGravityY(0); // gravity strength. 5 is good
         this.player.setBounce(0.5, 0.5);
         this.player.setVelocity(1,1);
   
@@ -112,33 +112,30 @@ class Play extends Phaser.Scene {
                 this.mouseY = this.input.activePointer.position.y + 18; 
                 this.mouseX = this.input.activePointer.position.x + 18;
 
-                // this.player.y < this.mouseY
-                // if (this.player.y < this.mouseY) {
-                //     this.player.body.velocity.x = 50;
-                //     this.player.body.velocity.y = -150; // negative y values go up
-                //     console.log("first if = go up bc mouse is below");
-                // }
-                if (Math.abs(this.player.y - this.mouseY) >= 0 && Math.abs(this.player.y - this.mouseY) <= 40 && (Math.abs(this.player.x - this.mouseX) >= 10 && (Math.abs(this.player.x - this.mouseX) <= 50))) {
-                    this.player.body.velocity.x = -85;
-                    this.player.body.velocity.y = 20;
-                    console.log("first if = go backwards when mouse is ahead of dandelion");
+                this.xRange = Math.abs(this.mouseX - this.player.x);
+                this.yRange = Math.abs(this.mouseY - this.player.y);
+               
+                if (this.player.x < this.mouseX && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 50)) {
+                    this.player.body.velocity.x = -80;
+                    this.player.body.velocity.y = 30;
+                    console.log("go backwards bc mouse is ahead");
                 }
-                else if (Math.abs(this.player.y - this.mouseY) >= 0 && Math.abs(this.player.y - this.mouseY) <= 40 && (Math.abs(this.player.x - this.mouseX) >= 0 && (Math.abs(this.player.x - this.mouseX) <= 40))) {
-                    this.player.body.velocity.x = 70;
-                    this.player.body.velocity.y = 20;
-                    console.log("second if = go to the side bc mouse is next to");
+                else if (this.player.x > this.mouseX && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 50)) {
+                    this.player.body.velocity.x = 80;
+                    this.player.body.velocity.y = 30;
+                    console.log("go to the right bc mouse is next to");
                 }
-                else if (this.player.y < this.mouseY) {
+                else if (this.player.y < this.mouseY && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 100)) {
                     this.player.body.velocity.x = 50;
                     this.player.body.velocity.y = -150; // negative y values go up
-                    console.log("third if = go up bc mouse is below");
+                    console.log("go up bc mouse is below");
                 }
-                else {
+                else if (this.player.y > this.mouseY && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 100)){
                     this.player.body.velocity.x = 60;
                     this.player.body.velocity.y = 75;  // positive y values go down
-                    console.log("last conditional = go down bc mouse is above");
+                    console.log("go down bc mouse is above");
                 }
-
+                
             }
 
         }
