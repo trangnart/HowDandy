@@ -12,11 +12,25 @@ class Play extends Phaser.Scene {
         this.load.image('dandy', './assets/placeHolder_dandelion.png');
         this.load.image('seed', './assets/placeHolder_seed.png');
         this.load.image('water', './assets/placeHolder_water.png');
-        this.load.image('ground', './assets/placeHolder_ground.png');
+        this.load.image('ground', './assets/ground_grass.png');
         this.load.image('wind', './assets/placeHolder_clickWind.png');
+        this.load.image('sky', './assets/sky.png');
     }
 
     create () {
+
+        this.background = this.add.tileSprite
+        (
+            0,
+            0,
+            1280,
+            720,
+            "sky"
+        ).setOrigin(0, 0);
+
+        this.grass = this.add.tileSprite(0, 0, 1280, 118, "ground").setOrigin(0,0);
+
+
         // mouse stuff
         this.input.mouse.capture = true;
         this.input.setDefaultCursor('url(./assets/placeHolder_windMouse.png), pointer');
@@ -73,6 +87,9 @@ class Play extends Phaser.Scene {
         }
 
         if (this.gameOver != true) {
+
+            this.background.tilePositionX -= 4;//move background
+            this.grass.tilePositionX -= 4;//move grass, visually
 
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
