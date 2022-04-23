@@ -82,7 +82,7 @@ class Play extends Phaser.Scene {
         this.water.setVelocityX(gameOptions.platformStartSpeed * 1);
 
 
-        this.add.text(20,20, "Play scene");
+        this.add.text(20,20, "Score");
         this.playerScore = this.add.text(150, 20, this.score);
         this.add.text(500,20, "Distance");
         this.distanceText = this.add.text(610, 20, this.distanceTraveled);
@@ -90,13 +90,23 @@ class Play extends Phaser.Scene {
         this.Health = this.add.text(360, 20, this.playerHealth);
 
               // add physics collider
-              this.physics.add.collider(this.player, this.ground);
+              this.physics.add.collider(this.player, this.ground, null, function() {
+
+                    if (this.playerHealth === 0) {
+                        this.gameOver = true;
+                        return;
+                    }
+
+                    this.playerHealth -= 1;
+              }, this);
     }
 
     update() {
 
+        this.Health.text = this.playerHealth;
         if (this.playerHealth == 0) {
             this.gameOver = true;
+            this.player.body.velocity.x = 0;
         }
 
         if (this.gameOver != true) {
@@ -105,9 +115,7 @@ class Play extends Phaser.Scene {
             // this.grass.tilePositionX -= 4;//move grass, visually
 
 
-        if(this.player) {
-
-        }
+       
 
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
@@ -118,7 +126,7 @@ class Play extends Phaser.Scene {
                 this.windCoolDown -= 1;
             }
 
-            this.Health.text = this.playerHealth;
+            //this.Health.text = this.playerHealth;
 
             // calculating distance and displaying it
             this.distanceTraveled += 0.01;
@@ -143,6 +151,8 @@ class Play extends Phaser.Scene {
                 this.playerScore.text = this.score;
                 this.seed.destroy();
             }
+
+            this.Health.text = this.playerHealth;
 
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
@@ -187,9 +197,12 @@ class Play extends Phaser.Scene {
     }
 
     // still needs work
-    collisionDandelion(player) {
-        player.body.velocity.x = 20;
-        player.body.velocity.y = -30;
+    collisionDandelion(playerHealth, box) {
+        playerHealth -= 1;
+        box.text = playerHealth;
+        console.log("hello");
+
+
     }
 
 
