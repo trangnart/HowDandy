@@ -1,3 +1,7 @@
+let gameOptions = {
+    platformStartSpeed: 350
+}
+var bot;
 class Play extends Phaser.Scene {
 
     constructor() {
@@ -13,7 +17,6 @@ class Play extends Phaser.Scene {
     }
 
     create () {
-
         // mouse stuff
         this.input.mouse.capture = true;
         this.input.setDefaultCursor('url(./assets/placeHolder_windMouse.png), pointer');
@@ -49,7 +52,9 @@ class Play extends Phaser.Scene {
 
         // terrain types
         this.ground = this.physics.add.sprite(320,720, 'ground',0);
+        this.ground.setVelocityX(gameOptions.platformStartSpeed * 1);
         this.water = this.physics.add.sprite(960,720, 'water',0);
+        this.water.setVelocityX(gameOptions.platformStartSpeed * 1);
 
 
         this.add.text(20,20, "Play scene");
