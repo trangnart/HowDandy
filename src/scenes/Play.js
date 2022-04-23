@@ -28,7 +28,8 @@ class Play extends Phaser.Scene {
             "sky"
         ).setOrigin(0, 0);
 
-        this.grass = this.add.tileSprite(0, 0, 1280, 118, "ground").setOrigin(0,0);
+        // this.grass = this.group.create(0, 700, 'ground_grass');
+        // this.add.tileSprite(0, 700, 1280, 118, "ground").setOrigin(0,0);
 
 
         // mouse stuff
@@ -61,12 +62,22 @@ class Play extends Phaser.Scene {
         this.player = this.physics.add.sprite(config.width/3, config.height/2, 'dandy',0);
         this.player.setGravityY(70); // gravity strength. 70 is good
         this.player.setBounce(0.5, 0.5);
+        this.player.setCollideWorldBounds(true);
         this.player.setVelocity(1,1);
+
+             
+
+
+
 
 
         // terrain types
-        this.ground = this.physics.add.sprite(320,720, 'ground',0);
-        this.ground.setVelocityX(gameOptions.platformStartSpeed * 1);
+        this.ground = this.physics.add.sprite(640,720, 'ground',0);
+        this.ground.body.setAllowGravity(false);
+        this.ground.body.immovable = true;
+        this.ground.body.allowGravity = false;
+        // this.ground.setBounce();
+        // this.ground.setVelocityX(gameOptions.platformStartSpeed * 1);
         this.water = this.physics.add.sprite(960,720, 'water',0);
         this.water.setVelocityX(gameOptions.platformStartSpeed * 1);
 
@@ -78,6 +89,8 @@ class Play extends Phaser.Scene {
         this.add.text(300,20, "Seed");
         this.Health = this.add.text(360, 20, this.playerHealth);
 
+              // add physics collider
+              this.physics.add.collider(this.player, this.ground);
     }
 
     update() {
@@ -89,7 +102,12 @@ class Play extends Phaser.Scene {
         if (this.gameOver != true) {
 
             this.background.tilePositionX -= 4;//move background
-            this.grass.tilePositionX -= 4;//move grass, visually
+            // this.grass.tilePositionX -= 4;//move grass, visually
+
+
+        if(this.player) {
+
+        }
 
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
@@ -162,6 +180,8 @@ class Play extends Phaser.Scene {
             }
 
         }
+
+        // this.physics.world.wrap(this.ground, this.ground.width/2);
 
 
     }
