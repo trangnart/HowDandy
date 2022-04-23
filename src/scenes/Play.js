@@ -45,7 +45,7 @@ class Play extends Phaser.Scene {
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
         this.player = this.physics.add.sprite(config.width/3, config.height/2, 'dandy',0);
-        this.player.setGravityY(0); // gravity strength. 5 is good
+        this.player.setGravityY(70); // gravity strength. 70 is good
         this.player.setBounce(0.5, 0.5);
         this.player.setVelocity(1,1);
 
@@ -87,7 +87,7 @@ class Play extends Phaser.Scene {
 
             // calculating distance and displaying it
             this.distanceTraveled += 0.01;
-            this.distanceText.text = this.distanceTraveled;
+            this.distanceText.text = this.distanceTraveled.toFixed(2);
 
             // when player presses space a seed drops
             //added cooldown for whenever pressed it's set to a value
@@ -95,12 +95,13 @@ class Play extends Phaser.Scene {
                 this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed', 0);
                 this.seedDroppped = true;
                 this.seed.setGravityY(135);
+                this.seed.body.velocity.y= 500;
                 this.dropCoolDown = 300;
                 console.log(this.dropCoolDown);
             }
 
             // still needs more tweaking
-            if (this.seedDroppped && this.seed.y >= 700) {
+            if (this.seedDroppped && this.seed.y >= 700) {//gotta change this to when the seed collides with the object of dirt
                 this.seedDroppped = false;
                 this.score += 100;
                 this.playerHealth -= 1;
