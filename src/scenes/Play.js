@@ -18,13 +18,13 @@ class Play extends Phaser.Scene {
         this.input.mouse.capture = true;
         this.input.setDefaultCursor('url(./assets/placeHolder_windMouse.png), pointer');
 
-        
+
 
         this.gameOver = false; // to tell if game is over or not
         this.seedDroppped = false;
         this.windPlaced = false;
 
-        this.terrainRange = 0; // number that will be checked 
+        this.terrainRange = 0; // number that will be checked
 
         this.distanceTraveled = 0; //distance
 
@@ -45,22 +45,24 @@ class Play extends Phaser.Scene {
         this.player.setGravityY(0); // gravity strength. 5 is good
         this.player.setBounce(0.5, 0.5);
         this.player.setVelocity(1,1);
-  
+
 
         // terrain types
         this.ground = this.physics.add.sprite(320,720, 'ground',0);
         this.water = this.physics.add.sprite(960,720, 'water',0);
-        
-       
+
+
         this.add.text(20,20, "Play scene");
         this.playerScore = this.add.text(150, 20, this.score);
-        this.add.text(300,20, "Distance");
-        this.distanceText = this.add.text(440, 20, this.distanceTraveled);
-        
+        this.add.text(500,20, "Distance");
+        this.distanceText = this.add.text(610, 20, this.distanceTraveled);
+        this.add.text(300,20, "Seed");
+        this.Health = this.add.text(360, 20, this.playerHealth);
+
     }
 
     update() {
-        
+
         if (this.playerHealth == 0) {
             this.gameOver = true;
         }
@@ -76,6 +78,8 @@ class Play extends Phaser.Scene {
                 this.windCoolDown -= 1;
             }
 
+            this.Health.text = this.playerHealth;
+
             // calculating distance and displaying it
             this.distanceTraveled += 0.01;
             this.distanceText.text = this.distanceTraveled;
@@ -83,7 +87,7 @@ class Play extends Phaser.Scene {
             // when player presses space a seed drops
             //added cooldown for whenever pressed it's set to a value
             if (Phaser.Input.Keyboard.JustDown(keySpace) && this.dropCoolDown <= 0) {
-                this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed', 0); 
+                this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed', 0);
                 this.seedDroppped = true;
                 this.seed.setGravityY(135);
                 this.dropCoolDown = 300;
@@ -105,12 +109,12 @@ class Play extends Phaser.Scene {
                 this.windPlaced = true;
 
                 // moving the dandelion in the opposite direction of the mouse click
-                this.mouseY = this.input.activePointer.position.y + 18; 
+                this.mouseY = this.input.activePointer.position.y + 18;
                 this.mouseX = this.input.activePointer.position.x + 18;
 
                 this.xRange = Math.abs(this.mouseX - this.player.x);
                 this.yRange = Math.abs(this.mouseY - this.player.y);
-               
+
                 if (this.player.x < this.mouseX && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 50)) {
                     this.player.body.velocity.x = -80;
                     this.player.body.velocity.y = 30;
@@ -131,7 +135,7 @@ class Play extends Phaser.Scene {
                     this.player.body.velocity.y = 75;  // positive y values go down
                     console.log("go down bc mouse is above");
                 }
-                
+
             }
 
         }
