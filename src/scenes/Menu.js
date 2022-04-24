@@ -12,8 +12,5 @@ class Menu extends Phaser.Scene {
         this.scene.start("playScene");
     }
 
-    // just go to the play scene right now and skip the menu
-    // update() {
-    //     this.scene.start('playScene');
-    // }
+   
 }

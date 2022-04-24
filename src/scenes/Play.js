@@ -61,9 +61,9 @@ class Play extends Phaser.Scene {
 
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
-        this.player = this.physics.add.sprite(config.width/3, config.height/2, 'dandy',0);
+        this.player = this.physics.add.sprite(config.width-300, config.height/3, 'dandy',0);
         this.player.setGravityY(70); // gravity strength. 70 is good
-        this.player.setBounce(0.5, 0.5);
+        this.player.setBounce(0.85);
         this.player.setCollideWorldBounds(true);
         this.player.setVelocity(1,1);
 
@@ -72,8 +72,6 @@ class Play extends Phaser.Scene {
         this.ground.body.setAllowGravity(false);
         this.ground.body.immovable = true;
         this.ground.body.allowGravity = false;
-        // this.ground.setBounce();
-        // this.ground.setVelocityX(gameOptions.platformStartSpeed * 1);
         this.water = this.physics.add.sprite(960,720, 'water',0);
         this.water.setVelocityX(gameOptions.platformStartSpeed * 1);
 
@@ -97,35 +95,52 @@ class Play extends Phaser.Scene {
         this.seed_power.body.allowGravity = false;
 
 
-        this.add.text(20,20, "Play scene");
+        this.add.text(20,20, "Score");
         this.playerScore = this.add.text(150, 20, this.score);
         this.add.text(500,20, "Distance");
         this.distanceText = this.add.text(610, 20, this.distanceTraveled);
-        this.add.text(300,20, "Seed");
+        this.add.text(300,20, "Seeds");
         this.Health = this.add.text(360, 20, this.playerHealth);
 
-    // add physics collider for player and ground
-            //   this.physics.add.collider(this.player, this.ground);
-            // this.player_collide = false;
+        this.canPlaceWind = this.add.text(game.config.width/2, game.config.height/8, "wind", {color: '#000000'}).setAlpha(0);
+        //this.canPlaceWind.color('#000000');
+
+        // add physics collider for player and ground
          this.physics.add.collider(this.player, this.ground, null, function(){
-            this.playerHealth -= 1; console.log(this.playerHealth)},this);
+             if (this.playerHealth == 0) {
+                 this.gameOver = true;
+                 this.player.body.velocity.x = 0;
+                 return;
+             }
+             this.playerHealth -= 1;
+             console.log(this.playerHealth)
+        },this);
+
         
  
-    //add physics collider with bird
-            this.physics.add.collider(this.player, this.incoming_bird, null, function(){
-                this.playerHealth -=0.5;
+        //add physics collider with bird
+        this.physics.add.collider(this.player, this.incoming_bird, null, function(){
+            if (this.playerHealth <= 10 && this.playerHealth >= 0) {
+                this.playerHealth -= 1;
                 this.incoming_bird.y = -100;
                 this.object_moving = false;
                 this.call_object = config.object_delay;
-            },this);
+            }
+            else {
+                return;
+            }
+        },this);
 
-    //add physics collider with seed power up
-    this.physics.add.collider(this.player, this.seed_power, null, function(){
-        if(this.playerHealth < 10) {this.playerHealth +=0.5;}
-        this.seed_power.y = -100;
-        this.object_moving = false;
-        this.call_object = config.object_delay;
-    },this);
+        //add physics collider with seed power up
+        this.physics.add.collider(this.player, this.seed_power, null, function(){
+            if(this.playerHealth <= 9) {
+                this.playerHealth += 1;
+            }
+            this.seed_power.y = -100;
+            this.object_moving = false;
+            this.call_object = config.object_delay;
+        },this);
+
     }
 
     update() {
@@ -224,8 +239,8 @@ class Play extends Phaser.Scene {
             }
 
             if(this.object_moving == true) {
-                this.seed_power.x += 13;
-                this.incoming_bird.x += 13;
+                this.seed_power.x += 5;
+                this.incoming_bird.x += 5;
                 // console.log(this.incoming_bird.x);
                 if(this.incoming_bird.x >= config.width || this.seed_power.x >= config.width) {
                     this.object_moving = false;
@@ -247,6 +262,7 @@ class Play extends Phaser.Scene {
 
             if (this.windCoolDown > 0) {
                 this.windCoolDown -= 1;
+                //this.canPlaceWind.setAlpha(100);
             }
 
             this.Health.text = this.playerHealth;
@@ -276,8 +292,9 @@ class Play extends Phaser.Scene {
             }
 
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
-                this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
+                //this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
                 this.windCoolDown = 100;
+                this.canPlaceWind.setAlpha(0);
                 this.windPlaced = true;
 
                 // moving the dandelion in the opposite direction of the mouse click
@@ -287,24 +304,24 @@ class Play extends Phaser.Scene {
                 this.xRange = Math.abs(this.mouseX - this.player.x);
                 this.yRange = Math.abs(this.mouseY - this.player.y);
 
-                if (this.player.x < this.mouseX && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 50)) {
+                if (this.player.x < this.mouseX && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 30)) {
                     this.player.body.velocity.x = -80;
-                    this.player.body.velocity.y = 30;
+                    this.player.body.velocity.y = -50;
                     console.log("go backwards bc mouse is ahead");
                 }
-                else if (this.player.x > this.mouseX && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 50)) {
+                else if (this.player.x > this.mouseX && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 30)) {
                     this.player.body.velocity.x = 80;
-                    this.player.body.velocity.y = 30;
+                    this.player.body.velocity.y = -50;
                     console.log("go to the right bc mouse is next to");
                 }
-                else if (this.player.y < this.mouseY && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 100)) {
-                    this.player.body.velocity.x = 50;
-                    this.player.body.velocity.y = -150; // negative y values go up
+                else if (this.player.y < this.mouseY && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 170)) {
+                    this.player.body.velocity.x = -30;
+                    this.player.body.velocity.y = -180; // negative y values go up
                     console.log("go up bc mouse is below");
                 }
-                else if (this.player.y > this.mouseY && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 100)){
-                    this.player.body.velocity.x = 60;
-                    this.player.body.velocity.y = 75;  // positive y values go down
+                else if (this.player.y > this.mouseY && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 170)){
+                    this.player.body.velocity.x = -60;
+                    this.player.body.velocity.y = 125;  // positive y values go down
                     console.log("go down bc mouse is above");
                 }
 
@@ -316,13 +333,6 @@ class Play extends Phaser.Scene {
 
 
     }
-
-    // still needs work
-    collisionDandelion(player) {
-        player.body.velocity.x = 20;
-        player.body.velocity.y = -30;
-    }
-
 
 
 }
