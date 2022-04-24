@@ -15,6 +15,8 @@ class Play extends Phaser.Scene {
         this.load.image('ground', './assets/ground_grass.png');
         this.load.image('wind', './assets/placeHolder_clickWind.png');
         this.load.image('sky', './assets/sky.png');
+        this.load.image('bird', './assets/bird.png');
+        this.load.image('power_up_seed', './assets/placeHolder_seed.png');
     }
 
     create () {
@@ -65,12 +67,6 @@ class Play extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
         this.player.setVelocity(1,1);
 
-             
-
-
-
-
-
         // terrain types
         this.ground = this.physics.add.sprite(640,720, 'ground',0);
         this.ground.body.setAllowGravity(false);
@@ -82,31 +78,60 @@ class Play extends Phaser.Scene {
         this.water.setVelocityX(gameOptions.platformStartSpeed * 1);
 
 
-        this.add.text(20,20, "Score");
+        //objects from side of the screen
+        this.call_object = config.object_delay;
+        this.call_random_number = -1;
+        this.call_random_object = -1;
+        this.object_moving = false;
+
+        //bird
+        this.incoming_bird = this.physics.add.sprite(0,-100, 'bird',0);
+        this.incoming_bird.body.setAllowGravity(false);
+        this.ground.body.immovable = true;
+        this.incoming_bird.body.allowGravity = false;
+
+        //seed power up
+        this.seed_power = this.physics.add.sprite(0, -100, 'power_up_seed',0);
+        this.seed_power.body.setAllowGravity(false);
+        this.seed_power.body.immovable = true;
+        this.seed_power.body.allowGravity = false;
+
+
+        this.add.text(20,20, "Play scene");
         this.playerScore = this.add.text(150, 20, this.score);
         this.add.text(500,20, "Distance");
         this.distanceText = this.add.text(610, 20, this.distanceTraveled);
         this.add.text(300,20, "Seed");
         this.Health = this.add.text(360, 20, this.playerHealth);
 
-              // add physics collider
-              this.physics.add.collider(this.player, this.ground, null, function() {
+    // add physics collider for player and ground
+            //   this.physics.add.collider(this.player, this.ground);
+            // this.player_collide = false;
+         this.physics.add.collider(this.player, this.ground, null, function(){
+            this.playerHealth -= 1; console.log(this.playerHealth)},this);
+        
+ 
+    //add physics collider with bird
+            this.physics.add.collider(this.player, this.incoming_bird, null, function(){
+                this.playerHealth -=0.5;
+                this.incoming_bird.y = -100;
+                this.object_moving = false;
+                this.call_object = config.object_delay;
+            },this);
 
-                    if (this.playerHealth === 0) {
-                        this.gameOver = true;
-                        return;
-                    }
-
-                    this.playerHealth -= 1;
-              }, this);
+    //add physics collider with seed power up
+    this.physics.add.collider(this.player, this.seed_power, null, function(){
+        if(this.playerHealth < 10) {this.playerHealth +=0.5;}
+        this.seed_power.y = -100;
+        this.object_moving = false;
+        this.call_object = config.object_delay;
+    },this);
     }
 
     update() {
 
-        this.Health.text = this.playerHealth;
         if (this.playerHealth == 0) {
             this.gameOver = true;
-            this.player.body.velocity.x = 0;
         }
 
         if (this.gameOver != true) {
@@ -115,7 +140,105 @@ class Play extends Phaser.Scene {
             // this.grass.tilePositionX -= 4;//move grass, visually
 
 
-       
+            //Calling incoming object (bird)
+            this.call_object -= 1;
+            if(this.call_object <= 0 && this.object_moving == false) {
+               this.call_random_number = Math.floor(Math.random() * 5);
+               this.call_random_object = Math.floor(Math.random() * 2);
+               console.log("random number =",this.call_random_number);
+               console.log("call number =",this.call_random_object);
+            //    this.call_object = config.object_delay;
+
+               if(this.call_random_number==0 && this.call_random_object == 0){
+                   this.incoming_bird.x = 14;
+                   this.incoming_bird.y = 101;
+                   this.object_moving = true;
+                   this.call_random_number = -1;
+                   this.call_random_object = -1;
+               }
+               else if(this.call_random_number==1 && this.call_random_object == 0){
+                this.incoming_bird.x = 14;
+                this.incoming_bird.y = 210;
+                this.object_moving = true;
+                this.call_random_number = -1;
+                this.call_random_object = -1;
+            }
+                else if(this.call_random_number==2 && this.call_random_object == 0){
+                this.incoming_bird.x = 14;
+                this.incoming_bird.y = 320;
+                this.object_moving = true;
+                this.call_random_number = -1;
+                this.call_random_object = -1;
+            }
+                else if(this.call_random_number==3 && this.call_random_object == 0){
+                this.incoming_bird.x = 14;
+                this.incoming_bird.y = 430;
+                this.object_moving = true;
+                this.call_random_number = -1;
+                this.call_random_object = -1;
+            }
+                else if(this.call_random_number==4 && this.call_random_object == 0){
+                this.incoming_bird.x = 14;
+                this.incoming_bird.y = 540;
+                this.object_moving = true;
+                this.call_random_number = -1;
+                this.call_random_object = -1;
+            }
+
+            else if(this.call_random_number==0 && this.call_random_object == 1){
+                this.seed_power.x = 14;
+                this.seed_power.y = 101;
+                this.object_moving = true;
+                this.call_random_number = -1;
+                this.call_random_object = -1;
+            }
+            else if(this.call_random_number==1 && this.call_random_object == 1){
+                this.seed_power.x = 14;
+                this.seed_power.y = 210;
+                this.object_moving = true;
+                this.call_random_number = -1;
+                this.call_random_object = -1;
+            }
+            else if(this.call_random_number==2 && this.call_random_object == 1){
+                this.seed_power.x = 14;
+                this.seed_power.y = 320;
+                this.object_moving = true;
+                this.call_random_number = -1;
+                this.call_random_object = -1;
+            }
+            else if(this.call_random_number==3 && this.call_random_object == 1){
+                this.seed_power.x = 14;
+                this.seed_power.y = 320;
+                this.object_moving = true;
+                this.call_random_number = -1;
+                this.call_random_object = -1;
+            }
+            else if(this.call_random_number==4 && this.call_random_object == 1){
+                this.seed_power.x = 14;
+                this.seed_power.y = 430;
+                this.object_moving = true;
+                this.call_random_number = -1;
+                this.call_random_object = -1;
+            }
+
+            }
+
+            if(this.object_moving == true) {
+                this.seed_power.x += 13;
+                this.incoming_bird.x += 13;
+                // console.log(this.incoming_bird.x);
+                if(this.incoming_bird.x >= config.width || this.seed_power.x >= config.width) {
+                    this.object_moving = false;
+                    this.incoming_bird.y = -100;
+                    this.seed_power.y = -100;
+                    this.incoming_bird.x = 0;
+                    this.seed_power.x = 0;
+                this.call_object = config.object_delay;
+                    // console.log(this.incoming_bird.x);
+                    // console.log(this.incoming_bird.y);
+                }
+            }
+
 
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
@@ -126,7 +249,7 @@ class Play extends Phaser.Scene {
                 this.windCoolDown -= 1;
             }
 
-            //this.Health.text = this.playerHealth;
+            this.Health.text = this.playerHealth;
 
             // calculating distance and displaying it
             this.distanceTraveled += 0.01;
@@ -151,8 +274,6 @@ class Play extends Phaser.Scene {
                 this.playerScore.text = this.score;
                 this.seed.destroy();
             }
-
-            this.Health.text = this.playerHealth;
 
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
@@ -197,12 +318,9 @@ class Play extends Phaser.Scene {
     }
 
     // still needs work
-    collisionDandelion(playerHealth, box) {
-        playerHealth -= 1;
-        box.text = playerHealth;
-        console.log("hello");
-
-
+    collisionDandelion(player) {
+        player.body.velocity.x = 20;
+        player.body.velocity.y = -30;
     }
 
 

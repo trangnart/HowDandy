@@ -4,6 +4,7 @@ let config = {
     width: 1280,          // game resolution rn is 720p
     height: 720,
     scene: [Menu, Play], // the scenes we will be using
+    object_delay: 100,
 
     // phaser arcade physic engine
     physics: {
