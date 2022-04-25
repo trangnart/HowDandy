@@ -107,17 +107,15 @@ class Play extends Phaser.Scene {
 
         // add physics collider for player and ground
          this.physics.add.collider(this.player, this.ground, null, function(){
-             if (this.playerHealth == 0) {
+             if (this.playerHealth < 0) {
                  this.gameOver = true;
                  this.player.body.velocity.x = 0;
                  return;
              }
              this.playerHealth -= 1;
-             console.log(this.playerHealth)
         },this);
 
-        
- 
+
         //add physics collider with bird
         this.physics.add.collider(this.player, this.incoming_bird, null, function(){
             if (this.playerHealth <= 10 && this.playerHealth >= 0) {
@@ -145,14 +143,14 @@ class Play extends Phaser.Scene {
 
     update() {
 
-        if (this.playerHealth == 0) {
+        if (this.playerHealth < 0) {
             this.gameOver = true;
         }
 
         if (this.gameOver != true) {
 
             this.background.tilePositionX -= 4;//move background
-            // this.grass.tilePositionX -= 4;//move grass, visually
+            //this.grass.tilePositionX -= 4;//move grass, visually
 
 
             //Calling incoming object (bird)
