@@ -72,8 +72,8 @@ class Play extends Phaser.Scene {
         this.ground.body.setAllowGravity(false);
         this.ground.body.immovable = true;
         this.ground.body.allowGravity = false;
-        this.water = this.physics.add.sprite(960,720, 'water',0);
-        this.water.setVelocityX(gameOptions.platformStartSpeed * 1);
+        //this.water = this.physics.add.sprite(960,720, 'water',0);
+        //this.water.setVelocityX(gameOptions.platformStartSpeed * 1);
 
 
         //objects from side of the screen
