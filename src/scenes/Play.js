@@ -1,6 +1,17 @@
 let gameOptions = {
     platformStartSpeed: 350
 }
+let gameConfig = {
+    fontFamily: 'Papyrus',
+    fontSize: '40px',
+    color: '#FFFFFF',
+    align: 'right',
+    padding: {
+        top: 5,
+        bottom: 5,
+    },
+    fixedWidth: 0
+}
 var bot;
 class Play extends Phaser.Scene {
 
@@ -58,6 +69,7 @@ class Play extends Phaser.Scene {
 
         // defining keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
@@ -107,30 +119,38 @@ class Play extends Phaser.Scene {
 
         // add physics collider for player and ground
          this.physics.add.collider(this.player, this.ground, null, function(){
-             if (this.playerHealth < 0) {
+            if (this.playerHealth <= 0) {
                  this.gameOver = true;
                  this.player.body.velocity.x = 0;
                  return;
              }
-             this.playerHealth -= 1;
+            else {
+            this.sound.play('sfx_grass');
+            this.playerHealth -= 1;
+            this.Health.text = this.playerHealth;
+            }
         },this);
 
 
         //add physics collider with bird
         this.physics.add.collider(this.player, this.incoming_bird, null, function(){
+            this.sound.play('sfx_bird');
             if (this.playerHealth <= 10 && this.playerHealth >= 0) {
                 this.playerHealth -= 1;
+                this.Health.text = this.playerHealth;
                 this.incoming_bird.y = -100;
                 this.object_moving = false;
                 this.call_object = config.object_delay;
             }
             else {
+                this.gameOver = true;
                 return;
             }
         },this);
 
         //add physics collider with seed power up
         this.physics.add.collider(this.player, this.seed_power, null, function(){
+            this.sound.play('sfx_powerup');
             if(this.playerHealth <= 9) {
                 this.playerHealth += 1;
             }
@@ -143,8 +163,13 @@ class Play extends Phaser.Scene {
 
     update() {
 
-        if (this.playerHealth < 0) {
+        if (this.playerHealth <= 0) {
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameConfig).setOrigin(0.5,2);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press R to Restart', gameConfig).setOrigin(0.5,1);
             this.gameOver = true;
+        }
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.scene.restart();
         }
 
         if (this.gameOver != true) {
@@ -272,6 +297,7 @@ class Play extends Phaser.Scene {
             // when player presses space a seed drops
             //added cooldown for whenever pressed it's set to a value
             if (Phaser.Input.Keyboard.JustDown(keySpace) && this.dropCoolDown <= 0) {
+                this.sound.play('sfx_drop');
                 this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed', 0);
                 this.seedDroppped = true;
                 this.seed.setGravityY(135);
@@ -287,6 +313,7 @@ class Play extends Phaser.Scene {
                 this.playerHealth -= 1;
                 this.playerScore.text = this.score;
                 this.seed.destroy();
+                this.Health.text = this.playerHealth;  
             }
 
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {

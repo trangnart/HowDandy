@@ -20,4 +20,4 @@ let game = new Phaser.Game(config);
 
 // reserving relevant keys
 let keySpace, keyEnter;
-let keyD;
+let keyD, keyR;
