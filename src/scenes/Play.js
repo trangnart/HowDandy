@@ -80,10 +80,14 @@ class Play extends Phaser.Scene {
         this.player.setVelocity(1,1);
 
         // terrain types
-        this.ground = this.physics.add.sprite(640,720, 'ground',0);
+        this.ground = this.add.tileSprite(640, 720, 1280, 118, 'ground');
+        this.physics.add.existing(this.ground, false);
+        //this.ground = this.physics.add.sprite(640,720, 'ground',0);
         this.ground.body.setAllowGravity(false);
-        this.ground.body.immovable = true;
+        //this.ground.body.immovable = true;
         this.ground.body.allowGravity = false;
+        
+
         //this.water = this.physics.add.sprite(960,720, 'water',0);
         //this.water.setVelocityX(gameOptions.platformStartSpeed * 1);
 
@@ -174,6 +178,7 @@ class Play extends Phaser.Scene {
 
         if (this.gameOver != true) {
 
+            this.ground.tilePositionX -= 4;
             this.background.tilePositionX -= 4;//move background
             //this.grass.tilePositionX -= 4;//move grass, visually
 
