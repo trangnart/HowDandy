@@ -84,7 +84,7 @@ class Play extends Phaser.Scene {
         this.physics.add.existing(this.ground, false);
         //this.ground = this.physics.add.sprite(640,720, 'ground',0);
         this.ground.body.setAllowGravity(false);
-        //this.ground.body.immovable = true;
+        this.ground.body.immovable = true;
         this.ground.body.allowGravity = false;
         
 
@@ -101,7 +101,7 @@ class Play extends Phaser.Scene {
         //bird
         this.incoming_bird = this.physics.add.sprite(0,-100, 'bird',0);
         this.incoming_bird.body.setAllowGravity(false);
-        this.ground.body.immovable = true;
+        this.incoming_bird.body.immovable = true;
         this.incoming_bird.body.allowGravity = false;
 
         //seed power up
@@ -139,12 +139,15 @@ class Play extends Phaser.Scene {
         //add physics collider with bird
         this.physics.add.collider(this.player, this.incoming_bird, null, function(){
             this.sound.play('sfx_bird');
-            if (this.playerHealth <= 10 && this.playerHealth >= 0) {
+            if (this.playerHealth <= 10 && this.playerHealth > 0) {
                 this.playerHealth -= 1;
                 this.Health.text = this.playerHealth;
-                this.incoming_bird.y = -100;
+                this.incoming_bird.y = -200;
+                this.seed_power.y = -200;
                 this.object_moving = false;
                 this.call_object = config.object_delay;
+                this.call_random_number = -1;
+               this.call_random_object = -1;
             }
             else {
                 this.gameOver = true;
@@ -155,12 +158,15 @@ class Play extends Phaser.Scene {
         //add physics collider with seed power up
         this.physics.add.collider(this.player, this.seed_power, null, function(){
             this.sound.play('sfx_powerup');
-            if(this.playerHealth <= 9) {
+            if(this.playerHealth <= 9 && this.playerHealth > 0) {
                 this.playerHealth += 1;
             }
-            this.seed_power.y = -100;
+            this.seed_power.y = -200;
+            this.incoming_bird.y = -200;
             this.object_moving = false;
             this.call_object = config.object_delay;
+            this.call_random_number = -1;
+            this.call_random_object = -1;
         },this);
 
     }
@@ -171,20 +177,25 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameConfig).setOrigin(0.5,2);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press R to Restart', gameConfig).setOrigin(0.5,1);
             this.gameOver = true;
+            this.player.setGravityY(0);
+            this.player.setVelocity(0,0);
         }
-        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+        if(this.gameOver == true && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
 
         if (this.gameOver != true) {
 
-            this.ground.tilePositionX -= 4;
+            this.ground.tilePositionX -= 5;
             this.background.tilePositionX -= 4;//move background
             //this.grass.tilePositionX -= 4;//move grass, visually
 
 
             //Calling incoming object (bird)
-            this.call_object -= 1;
+            if(this.call_object > 0) {
+                this.call_object -= 1;
+                console.log("countdown =",this.call_object);
+            }
             if(this.call_object <= 0 && this.object_moving == false) {
                this.call_random_number = Math.floor(Math.random() * 5);
                this.call_random_object = Math.floor(Math.random() * 2);
@@ -267,13 +278,13 @@ class Play extends Phaser.Scene {
             }
 
             if(this.object_moving == true) {
-                this.seed_power.x += 5;
-                this.incoming_bird.x += 5;
+                this.seed_power.x += 10;
+                this.incoming_bird.x += 10;
                 // console.log(this.incoming_bird.x);
                 if(this.incoming_bird.x >= config.width || this.seed_power.x >= config.width) {
                     this.object_moving = false;
-                    this.incoming_bird.y = -100;
-                    this.seed_power.y = -100;
+                    this.incoming_bird.y = -200;
+                    this.seed_power.y = -200;
                     this.incoming_bird.x = 0;
                     this.seed_power.x = 0;
                 this.call_object = config.object_delay;
