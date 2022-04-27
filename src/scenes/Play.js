@@ -86,15 +86,14 @@ class Play extends Phaser.Scene {
         this.physics.add.existing(this.ground, false);
         this.ground.body.setAllowGravity(false);
         this.ground.body.allowGravity = false;
+        this.ground.body.immovable = true;
         
         // water 
         this.water = this.add.tileSprite(-640, 720, 1280, 118, 'water');
         this.physics.add.existing(this.water, false);
         this.water.body.setAllowGravity(false);
         this.water.body.allowGravity = false;
-
-        //this.water = this.physics.add.sprite(960,720, 'water',0);
-
+        this.water.body.immovable = true;
 
         //objects from side of the screen
         this.call_object = config.object_delay;
@@ -105,7 +104,7 @@ class Play extends Phaser.Scene {
         //bird
         this.incoming_bird = this.physics.add.sprite(0,-100, 'bird',0);
         this.incoming_bird.body.setAllowGravity(false);
-        this.ground.body.immovable = true;
+        this.incoming_bird.body.immovable = true;
         this.incoming_bird.body.allowGravity = false;
 
         //seed power up
@@ -184,6 +183,7 @@ class Play extends Phaser.Scene {
             this.gameOver = true;
             this.player.body.physics = false;
             this.player.body.setBounce(0);
+            this.player.body.gravity = false;
         }
 
         // restart the game
@@ -317,21 +317,23 @@ class Play extends Phaser.Scene {
             // changing the terrain to water
             this.terrainRange += 0.01;
             // once ground is offscreen reset it to the front
-            if (this.ground.x >= 1910) {
+            // used to be 1917
+            if (this.ground.x >= 1920) {
                 this.terrainRange = -10;
                 this.ground.x = -640;
             }
-            if (this.water.x >= 1910) {
+            if (this.water.x >= 1920) {
                 this.water.x = -640;
                 this.terrainRange = -10;
             }
-            if (this.terrainRange >= 5 && this.terrainRange <= 30.7) {
+            // the range has to stay like this but the values can change if that makes sense
+            if (this.terrainRange >= 5 && this.terrainRange <= 30.8) {
 
                 this.ground.x += 0.5;
                 this.water.x += 0.5;
             }
-            console.log(this.terrainRange);
-            console.log("this is the WATER x", this.water.x);
+            //console.log(this.terrainRange);
+            //console.log("this is the WATER x", this.water.x);
            
             // when player presses space a seed drops
             // added cooldown for whenever pressed it's set to a value
