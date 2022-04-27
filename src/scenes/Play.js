@@ -144,6 +144,7 @@ class Play extends Phaser.Scene {
         this.incoming_bird.body.setAllowGravity(false);
         this.incoming_bird.body.immovable = true;
         this.incoming_bird.body.allowGravity = false;
+        this.incoming_bird.setScale(0.7);
 
         //seed power up
         this.seed_power = this.physics.add.sprite(0, -100, 'power_up_seed',0);
@@ -357,11 +358,11 @@ class Play extends Phaser.Scene {
                 }
             }
 
-            //while the cool down is not reset to 0, keep removing the value
+            // while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
                 this.dropCoolDown -= 1;
                 this.dropTimer.text = 'Drop Cooldown: ' + this.dropCoolDown;
-            }//end if
+            }
             else {
                 this.dropTimer.text = 'Drop Cooldown: ✓';
             }
@@ -369,14 +370,11 @@ class Play extends Phaser.Scene {
             if (this.windCoolDown > 0) {
                 this.windCoolDown -= 1;
                 this.windTimer.text = 'Wind Cooldown: ' + this.windCoolDown;
-                //this.canPlaceWind.setAlpha(100);
             }
             else {
                 this.windTimer.text = 'Wind Cooldown: ✓';
             }
 
-            // this.windTimer.text = '✓';
-            // this.dropTimer.text = '✓';
             this.Health.text = this.playerHealth;
 
             // calculating distance and displaying it
@@ -386,7 +384,6 @@ class Play extends Phaser.Scene {
             // changing the terrain to water
             this.terrainRange += 0.01;
             // once ground is offscreen reset it to the front
-            // used to be 1917
             if (this.ground.x >= 1920) {
                 this.terrainRange = -10;
                 this.ground.x = -640;
@@ -401,40 +398,22 @@ class Play extends Phaser.Scene {
                 this.ground.x += 0.5;
                 this.water.x += 0.5;
             }
-            //console.log(this.terrainRange);
-            //console.log("this is the WATER x", this.water.x);
 
             // when player presses space a seed drops
             // added cooldown for whenever pressed it's set to a value
             if (Phaser.Input.Keyboard.JustDown(keySpace) && this.dropCoolDown <= 0) {
                 this.sound.play('sfx_drop');
                 this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed');
-                // this.seedDroppped = true;
                 this.seed.setGravityY(135);
                 this.seed.body.velocity.y= 500;
                 this.seedGroup.add(this.seed);
                 this.dropCoolDown = 300;
-
-                //console.log(this.dropCoolDown);
             }
 
-            // still needs more tweaking
-            // seed "collision" detection
-            // if (this.seedDroppped && this.seed.y >= 700) {//gotta change this to when the seed collides with the object of dirt
-            //     this.seedDroppped = false;
-            //     this.score += 100;
-            //     this.playerHealth -= 1;
-            //     this.playerScore.text = this.score;
-            //     this.seed.destroy();
-            //     this.Health.text = this.playerHealth;
-            // }
-
-
+            
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
-                //this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
                 this.windCoolDown = 100;
-                //this.canPlaceWind.setAlpha(0);
                 this.windPlaced = true;
 
                 // moving the dandelion in the opposite direction of the mouse click
