@@ -33,7 +33,7 @@ class Menu extends Phaser.Scene {
         let keyConfig = {
             fontFamily: 'Papyrus',
             fontSize: '30px',
-            color: '#066163',
+            color: '#417D7A',
             align: 'right',
             padding: {
                 top: 5,

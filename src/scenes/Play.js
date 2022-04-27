@@ -12,6 +12,7 @@ let gameConfig = {
     },
     fixedWidth: 0
 }
+
 var bot;
 class Play extends Phaser.Scene {
 
@@ -40,10 +41,24 @@ class Play extends Phaser.Scene {
             720,
             "sky"
         ).setOrigin(0, 0);
-
         // this.grass = this.group.create(0, 700, 'ground_grass');
         // this.add.tileSprite(0, 700, 1280, 118, "ground").setOrigin(0,0);
-
+        let barConfig = {
+            fontFamily: 'Papyrus',
+            fontSize: '20px',
+            backgroundColor: '#89CFF0',
+            color: '#FF0000',
+            align: 'right',
+            padding: {
+                top: 10,
+                bottom: 5,
+            },
+            fixedWidth: 200
+        }
+        // bar drop create
+        this.bar = this.add.text(borderUISize - borderPadding + 760, borderUISize -40, this.dropText, barConfig);
+        this.dropText = this.add.text(800, 20, "Drop countdown:");
+        this.dropTimer = this.add.text(950, 20, this.dropCoolDown);
 
         // mouse stuff
         this.input.mouse.capture = true;
@@ -90,8 +105,8 @@ class Play extends Phaser.Scene {
         this.ground.body.setAllowGravity(false);
         this.ground.body.allowGravity = false;
         this.ground.body.immovable = true;
-        
-        // water 
+
+        // water
         this.water = this.add.tileSprite(-640, 720, 1280, 118, 'water');
         this.physics.add.existing(this.water, false);
         this.water.body.setAllowGravity(false);
@@ -127,7 +142,7 @@ class Play extends Phaser.Scene {
         //this.canPlaceWind = this.add.text(game.config.width/2, game.config.height/8, "wind", {color: '#000000'}).setAlpha(0);
         //this.canPlaceWind.color('#000000');
 
-        
+
         // COLLISION stuff below
         // add physics collider for player and ground
          this.physics.add.collider(this.player, this.ground, null, function(){
@@ -193,6 +208,7 @@ class Play extends Phaser.Scene {
             this.seedGroup.clear(true, true);
             console.log("inside water and seed collision");
         }, this);
+
 
     }
 
@@ -325,6 +341,7 @@ class Play extends Phaser.Scene {
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
                 this.dropCoolDown -= 1;
+                this.dropTimer.text = this.dropCoolDown;
             }//end if
 
             if (this.windCoolDown > 0) {
@@ -358,7 +375,7 @@ class Play extends Phaser.Scene {
             }
             //console.log(this.terrainRange);
             //console.log("this is the WATER x", this.water.x);
-           
+
             // when player presses space a seed drops
             // added cooldown for whenever pressed it's set to a value
             if (Phaser.Input.Keyboard.JustDown(keySpace) && this.dropCoolDown <= 0) {
@@ -381,10 +398,10 @@ class Play extends Phaser.Scene {
             //     this.playerHealth -= 1;
             //     this.playerScore.text = this.score;
             //     this.seed.destroy();
-            //     this.Health.text = this.playerHealth;  
+            //     this.Health.text = this.playerHealth;
             // }
 
-            
+
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 //this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
