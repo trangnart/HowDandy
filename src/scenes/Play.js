@@ -56,10 +56,7 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 200
         }
-        // bar dropCoolDown
-        this.barDrop = this.add.text(borderUISize - borderPadding + 700, borderUISize -40, this.dropText, dropConfig);
-        this.dropText = this.add.text(745, 20, "Drop countdown:");
-        this.dropTimer = this.add.text(895, 20, this.dropCoolDown);
+       
 
         let windConfig = {
             fontFamily: 'Papyrus',
@@ -73,10 +70,6 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 200
         }
-        // bar windCoolDown
-        this.barWind = this.add.text(borderUISize - borderPadding + 1000, borderUISize - 40, this.windText, windConfig);
-        this.windText = this.add.text(1045, 20, "Wind countdown:");
-        this.windTimer = this.add.text(1199, 20, this.windCoolDown);
 
         // mouse stuff
         this.input.mouse.capture = true;
@@ -96,6 +89,16 @@ class Play extends Phaser.Scene {
         // cool down for wind and seed drop
         this.dropCoolDown = 0;
         this.windCoolDown = 0;
+
+        // bar dropCoolDown
+        // this.barDrop = this.add.text(borderUISize - borderPadding + 700, borderUISize -40, this.dropText, dropConfig);
+        // this.dropText = this.add.text(745, 20, "Drop countdown:");
+        this.dropTimer = this.add.text(800, 20, "Drop Cooldown: " + this.dropCoolDown, dropConfig);
+
+        // bar windCoolDown
+        // this.barWind = this.add.text(borderUISize - borderPadding + 1000, borderUISize - 40, this.windText, windConfig);
+        // this.windText = this.add.text(1045, 20, "Wind countdown:");
+        this.windTimer = this.add.text(1070, 20, "Wind Cooldown: " + this.windCoolDown, windConfig);
 
         // defining keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -357,19 +360,19 @@ class Play extends Phaser.Scene {
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
                 this.dropCoolDown -= 1;
-                this.dropTimer.text = 'X';
+                this.dropTimer.text = 'Drop Cooldown: ' + this.dropCoolDown;
             }//end if
             else {
-                this.dropTimer.text = '✓';
+                this.dropTimer.text = 'Drop Cooldown: ✓';
             }
 
             if (this.windCoolDown > 0) {
                 this.windCoolDown -= 1;
-                this.windTimer.text = 'X';
+                this.windTimer.text = 'Wind Cooldown: ' + this.windCoolDown;
                 //this.canPlaceWind.setAlpha(100);
             }
             else {
-                this.windTimer.text = '✓';
+                this.windTimer.text = 'Wind Cooldown: ✓';
             }
 
             // this.windTimer.text = '✓';
