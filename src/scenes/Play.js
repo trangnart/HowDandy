@@ -49,15 +49,11 @@ class Play extends Phaser.Scene {
         this.input.mouse.capture = true;
         this.input.setDefaultCursor('url(./assets/placeHolder_windMouse.png), pointer');
 
-
-
         this.gameOver = false; // to tell if game is over or not
         this.seedDroppped = false;
         this.windPlaced = false;
-
         this.terrainRange = 0; // number that will be checked
         this.isItWater = false;
-
         this.distanceTraveled = 0; //distance
 
         // player stats
@@ -65,6 +61,7 @@ class Play extends Phaser.Scene {
         this.playerHealth = 10;
         this.score = 0;
 
+        // cool down for wind and seed drop
         this.dropCoolDown = 0;
         this.windCoolDown = 0;
 
@@ -79,6 +76,12 @@ class Play extends Phaser.Scene {
         this.player.setBounce(0.85);
         this.player.setCollideWorldBounds(true);
         this.player.setVelocity(1,1);
+
+        // seed group
+        this.seedGroup = this.physics.add.group({
+            gravityY: 135,
+            velocityY: 500
+        });
 
         // terrain types
         // used to be 640, 720, 1280, 118
@@ -121,9 +124,11 @@ class Play extends Phaser.Scene {
         this.add.text(300,20, "Seeds");
         this.Health = this.add.text(360, 20, this.playerHealth);
 
-        this.canPlaceWind = this.add.text(game.config.width/2, game.config.height/8, "wind", {color: '#000000'}).setAlpha(0);
+        //this.canPlaceWind = this.add.text(game.config.width/2, game.config.height/8, "wind", {color: '#000000'}).setAlpha(0);
         //this.canPlaceWind.color('#000000');
 
+        
+        // COLLISION stuff below
         // add physics collider for player and ground
          this.physics.add.collider(this.player, this.ground, null, function(){
             if (this.playerHealth <= 0) {
@@ -138,12 +143,10 @@ class Play extends Phaser.Scene {
             }
         },this);
 
-
         // player and water collision
         this.physics.add.collider(this.player, this.water, null, function() {
             this.gameOver = true;
         }, this);
-
 
         //add physics collider with bird
         this.physics.add.collider(this.player, this.incoming_bird, null, function(){
@@ -172,12 +175,33 @@ class Play extends Phaser.Scene {
             this.call_object = config.object_delay;
         },this);
 
+        // seed and terrain collision
+        this.physics.add.collider(this.seedGroup, this.ground, null, function() {
+            this.score += 100;
+            if (this.playerHealth >= 0 && this.playerHealth <= 10) {
+                this.playerHealth -= 1;
+            }
+            this.playerScore.text = this.score;
+            this.seedGroup.clear(true, true);
+            console.log("inside ground and seed collision");
+        }, this);
+
+        this.physics.add.collider(this.seedGroup, this.water, null, function() {
+            if (this.playerHealth >= 0 && this.playerHealth <= 10) {
+                this.playerHealth -= 1;
+            }
+            this.seedGroup.clear(true, true);
+            console.log("inside water and seed collision");
+        }, this);
+
     }
 
     update() {
 
         // game over happens
         if (this.playerHealth <= 0 || this.gameOver == true) {
+            this.playerHealth  = 0;
+            this.Health.text = this.playerHealth;
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameConfig).setOrigin(0.5,2);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press R to Restart', gameConfig).setOrigin(0.5,1);
             this.gameOver = true;
@@ -203,9 +227,9 @@ class Play extends Phaser.Scene {
             if(this.call_object <= 0 && this.object_moving == false) {
                this.call_random_number = Math.floor(Math.random() * 5);
                this.call_random_object = Math.floor(Math.random() * 2);
-               console.log("random number =",this.call_random_number);
-               console.log("call number =",this.call_random_object);
-            //    this.call_object = config.object_delay;
+               //console.log("random number =",this.call_random_number);
+               //console.log("call number =",this.call_random_object);
+               //this.call_object = config.object_delay;
 
                if(this.call_random_number==0 && this.call_random_object == 0){
                    this.incoming_bird.x = 14;
@@ -339,31 +363,33 @@ class Play extends Phaser.Scene {
             // added cooldown for whenever pressed it's set to a value
             if (Phaser.Input.Keyboard.JustDown(keySpace) && this.dropCoolDown <= 0) {
                 this.sound.play('sfx_drop');
-                this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed', 0);
-                this.seedDroppped = true;
+                this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed');
+                // this.seedDroppped = true;
                 this.seed.setGravityY(135);
                 this.seed.body.velocity.y= 500;
+                this.seedGroup.add(this.seed);
                 this.dropCoolDown = 300;
+
                 //console.log(this.dropCoolDown);
             }
 
             // still needs more tweaking
             // seed "collision" detection
-            if (this.seedDroppped && this.seed.y >= 700) {//gotta change this to when the seed collides with the object of dirt
-                this.seedDroppped = false;
-                this.score += 100;
-                this.playerHealth -= 1;
-                this.playerScore.text = this.score;
-                this.seed.destroy();
-                this.Health.text = this.playerHealth;  
-            }
+            // if (this.seedDroppped && this.seed.y >= 700) {//gotta change this to when the seed collides with the object of dirt
+            //     this.seedDroppped = false;
+            //     this.score += 100;
+            //     this.playerHealth -= 1;
+            //     this.playerScore.text = this.score;
+            //     this.seed.destroy();
+            //     this.Health.text = this.playerHealth;  
+            // }
 
             
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 //this.wind = this.physics.add.sprite(this.input.activePointer.position.x+18, this.input.activePointer.position.y+18, 'wind', 0); // wind was offset a bit so now it is place correctly
                 this.windCoolDown = 100;
-                this.canPlaceWind.setAlpha(0);
+                //this.canPlaceWind.setAlpha(0);
                 this.windPlaced = true;
 
                 // moving the dandelion in the opposite direction of the mouse click
