@@ -49,21 +49,21 @@ class Play extends Phaser.Scene {
             fontSize: '20px',
             backgroundColor: '#89CFF0',
             color: '#FF0000',
-            align: 'right',
+            align: 'left',
             padding: {
                 top: 10,
                 bottom: 5,
             },
             fixedWidth: 200
         }
-       
+
 
         let windConfig = {
             fontFamily: 'Papyrus',
             fontSize: '20px',
             backgroundColor: '#89CFF0',
             color: '#FF0000',
-            align: 'right',
+            align: 'left',
             padding: {
                 top: 10,
                 bottom: 5,
@@ -93,12 +93,12 @@ class Play extends Phaser.Scene {
         // bar dropCoolDown
         // this.barDrop = this.add.text(borderUISize - borderPadding + 700, borderUISize -40, this.dropText, dropConfig);
         // this.dropText = this.add.text(745, 20, "Drop countdown:");
-        this.dropTimer = this.add.text(800, 20, "Drop Cooldown: " + this.dropCoolDown, dropConfig);
+        this.dropTimer = this.add.text(750, 15, "Drop Cooldown: " + this.dropCoolDown, dropConfig);
 
         // bar windCoolDown
         // this.barWind = this.add.text(borderUISize - borderPadding + 1000, borderUISize - 40, this.windText, windConfig);
         // this.windText = this.add.text(1045, 20, "Wind countdown:");
-        this.windTimer = this.add.text(1070, 20, "Wind Cooldown: " + this.windCoolDown, windConfig);
+        this.windTimer = this.add.text(1045, 15, "Wind Cooldown: " + this.windCoolDown, windConfig);
 
         // defining keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
