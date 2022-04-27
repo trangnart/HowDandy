@@ -13,6 +13,7 @@ let gameConfig = {
     fixedWidth: 0
 }
 
+
 var bot;
 class Play extends Phaser.Scene {
 
@@ -43,7 +44,7 @@ class Play extends Phaser.Scene {
         ).setOrigin(0, 0);
         // this.grass = this.group.create(0, 700, 'ground_grass');
         // this.add.tileSprite(0, 700, 1280, 118, "ground").setOrigin(0,0);
-        let barConfig = {
+        let dropConfig = {
             fontFamily: 'Papyrus',
             fontSize: '20px',
             backgroundColor: '#89CFF0',
@@ -55,10 +56,27 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 200
         }
-        // bar drop create
-        this.bar = this.add.text(borderUISize - borderPadding + 760, borderUISize -40, this.dropText, barConfig);
-        this.dropText = this.add.text(800, 20, "Drop countdown:");
-        this.dropTimer = this.add.text(950, 20, this.dropCoolDown);
+        // bar dropCoolDown
+        this.barDrop = this.add.text(borderUISize - borderPadding + 700, borderUISize -40, this.dropText, dropConfig);
+        this.dropText = this.add.text(745, 20, "Drop countdown:");
+        this.dropTimer = this.add.text(895, 20, this.dropCoolDown);
+
+        let windConfig = {
+            fontFamily: 'Papyrus',
+            fontSize: '20px',
+            backgroundColor: '#89CFF0',
+            color: '#FF0000',
+            align: 'right',
+            padding: {
+                top: 10,
+                bottom: 5,
+            },
+            fixedWidth: 200
+        }
+        // bar windCoolDown
+        this.barWind = this.add.text(borderUISize - borderPadding + 1000, borderUISize - 40, this.windText, windConfig);
+        this.windText = this.add.text(1045, 20, "Wind countdown:");
+        this.windTimer = this.add.text(1199, 20, this.windCoolDown);
 
         // mouse stuff
         this.input.mouse.capture = true;
@@ -337,7 +355,6 @@ class Play extends Phaser.Scene {
                 }
             }
 
-
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
                 this.dropCoolDown -= 1;
@@ -346,6 +363,7 @@ class Play extends Phaser.Scene {
 
             if (this.windCoolDown > 0) {
                 this.windCoolDown -= 1;
+                this.windTimer.text = this.windCoolDown;
                 //this.canPlaceWind.setAlpha(100);
             }
 
