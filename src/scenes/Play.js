@@ -86,7 +86,6 @@ class Play extends Phaser.Scene {
         this.seedDroppped = false;
         this.windPlaced = false;
         this.terrainRange = 0; // number that will be checked
-        this.isItWater = false;
         this.distanceTraveled = 0; //distance
 
         // player stats
@@ -182,7 +181,7 @@ class Play extends Phaser.Scene {
         }, this);
 
         //add physics collider with bird
-        this.physics.add.collider(this.player, this.incoming_bird, null, function(){
+        this.physics.add.overlap(this.player, this.incoming_bird, null, function(){
             this.sound.play('sfx_bird');
             if (this.playerHealth <= 10 && this.playerHealth >= 0) {
                 this.playerHealth -= 1;
@@ -198,7 +197,7 @@ class Play extends Phaser.Scene {
         },this);
 
         //add physics collider with seed power up
-        this.physics.add.collider(this.player, this.seed_power, null, function(){
+        this.physics.add.overlap(this.player, this.seed_power, null, function(){
             this.sound.play('sfx_powerup');
             if(this.playerHealth <= 9) {
                 this.playerHealth += 1;
@@ -358,15 +357,23 @@ class Play extends Phaser.Scene {
             //while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
                 this.dropCoolDown -= 1;
-                this.dropTimer.text = this.dropCoolDown;
+                this.dropTimer.text = 'X';
             }//end if
+            else {
+                this.dropTimer.text = '✓';
+            }
 
             if (this.windCoolDown > 0) {
                 this.windCoolDown -= 1;
-                this.windTimer.text = this.windCoolDown;
+                this.windTimer.text = 'X';
                 //this.canPlaceWind.setAlpha(100);
             }
+            else {
+                this.windTimer.text = '✓';
+            }
 
+            // this.windTimer.text = '✓';
+            // this.dropTimer.text = '✓';
             this.Health.text = this.playerHealth;
 
             // calculating distance and displaying it
