@@ -4,7 +4,7 @@ let gameOptions = {
 let gameConfig = {
     fontFamily: 'Yoster',
     fontSize: '40px',
-    color: '#000000',
+    color: '#cc3e36',
     align: 'right',
     padding: {
         top: 5,
@@ -80,7 +80,7 @@ class Play extends Phaser.Scene {
         this.windPlaced = false;
         this.terrainRange = 0; // number that will be checked
         this.distanceTraveled = 0; //distance
-        
+
         // sound effect booleans
         this.birdEffect = false;
         this.seedEffect = false;
@@ -444,7 +444,7 @@ class Play extends Phaser.Scene {
                 this.dropCoolDown = 300;
             }
 
-            
+
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 this.windCoolDown = 100;

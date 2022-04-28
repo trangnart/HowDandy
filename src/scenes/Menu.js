@@ -4,6 +4,8 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
+    // load bg menu
+    this.load.image('bg', './assets/bg.png');
     // load audio
     this.load.audio('sfx_select', './assets/select_D.wav');
     this.load.audio('sfx_powerup', './assets/powerup.wav');
@@ -13,15 +15,12 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(20,20, "Hello");
-        this.scene.start("playScene");
-    }
-    create() {
         // menu text configuration
+        this.add.image(0,0, "bg").setOrigin(0).setDepth(0);
         let menuConfig = {
             fontFamily: 'Yoster',
             fontSize: '80px',
-            color: '#B4E197',
+            color: '#eeeeee',
             align: 'right',
             padding: {
                 top: 5,
@@ -33,7 +32,7 @@ class Menu extends Phaser.Scene {
         let keyConfig = {
             fontFamily: 'Yoster',
             fontSize: '30px',
-            color: '#417D7A',
+            color: '#c2b7a4',
             align: 'right',
             padding: {
                 top: 5,
@@ -45,8 +44,8 @@ class Menu extends Phaser.Scene {
         let startConfig = {
             fontFamily: 'Yoster',
             fontSize: '30px',
-            backgroundColor: '#066163',
-            color: '#CDBE78',
+            backgroundColor: '#344501',
+            color: '#a5b378',
             align: 'right',
             padding: {
                 top: 5,
@@ -57,7 +56,7 @@ class Menu extends Phaser.Scene {
 
         // show menu text
         this.add.text(game.config.width/2, game.config.height/2, 'HOW DANDY', menuConfig).setOrigin(0.5, 2.5);
-        this.add.text(game.config.width/2, game.config.height/2, 'Press D to start', startConfig).setOrigin(0.5,-1);
+        this.add.text(game.config.width/2, game.config.height/2, 'Press D to start', startConfig).setOrigin(0.5,-1.5);
         this.add.text(game.config.width/2, game.config.height/2, '>Use mouse to control Dandy<', keyConfig).setOrigin(0.5,2);
         this.add.text(game.config.width/2, game.config.height/2, '>Press space to drop seed<', keyConfig).setOrigin(0.5,1);
 
