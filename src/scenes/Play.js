@@ -44,8 +44,7 @@ class Play extends Phaser.Scene {
             720,
             "sky"
         ).setOrigin(0, 0);
-        // this.grass = this.group.create(0, 700, 'ground_grass');
-        // this.add.tileSprite(0, 700, 1280, 118, "ground").setOrigin(0,0);
+
         let dropConfig = {
             fontFamily: 'Yoster',
             fontSize: '18px',
@@ -58,7 +57,6 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 200
         }
-
 
         let windConfig = {
             fontFamily: 'Yoster',
@@ -82,6 +80,10 @@ class Play extends Phaser.Scene {
         this.windPlaced = false;
         this.terrainRange = 0; // number that will be checked
         this.distanceTraveled = 0; //distance
+        
+        // sound effect booleans
+        this.birdEffect = false;
+        this.seedEffect = false;
 
         // player stats
         this.seedsDropped = 0;
@@ -189,6 +191,7 @@ class Play extends Phaser.Scene {
                 this.playerHealth -= 1;
                 this.Health.text = this.playerHealth;
             }
+            console.log('inside ground collision');
         },this);
 
         // player and water collision
@@ -198,29 +201,33 @@ class Play extends Phaser.Scene {
 
         //add physics collider with bird
         this.physics.add.overlap(this.player, this.incoming_bird, null, function(){
-            this.sound.play('sfx_bird');
+            //this.sound.play('sfx_bird');
             if (this.playerHealth <= 10 && this.playerHealth >= 0) {
                 this.playerHealth -= 1;
                 this.Health.text = this.playerHealth;
                 this.incoming_bird.y = -100;
                 this.object_moving = false;
                 this.call_object = config.object_delay;
+                this.birdEffect = true;
             }
             else {
                 this.gameOver = true;
                 return;
             }
+            console.log('inside bird collision');
         },this);
 
         //add physics collider with seed power up
         this.physics.add.overlap(this.player, this.seed_power, null, function(){
-            this.sound.play('sfx_powerup');
+            //this.sound.play('sfx_powerup');
             if(this.playerHealth <= 9) {
                 this.playerHealth += 1;
             }
             this.seed_power.y = -100;
             this.object_moving = false;
             this.call_object = config.object_delay;
+            this.seedEffect = true;
+            console.log('inside powerup collision');
         },this);
 
         // seed and terrain collision
@@ -251,6 +258,8 @@ class Play extends Phaser.Scene {
 
         // game over happens
         if (this.playerHealth <= 0 || this.gameOver == true) {
+            this.birdEffect = false;
+            this.seedEffect = false;
             this.playerHealth  = 0;
             this.Health.text = this.playerHealth;
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameConfig).setOrigin(0.5,2);
@@ -268,6 +277,15 @@ class Play extends Phaser.Scene {
 
         // game loop
         if (this.gameOver != true) {
+
+            if (this.birdEffect == true) {
+                this.sound.play('sfx_bird');
+                this.birdEffect = false;
+            }
+            else if (this.seedEffect == true) {
+                this.sound.play('sfx_powerup');
+                this.seedEffect = false;
+            }
 
             this.ground.tilePositionX -= 4; // move the ground
             this.water.tilePositionX -= 4;
