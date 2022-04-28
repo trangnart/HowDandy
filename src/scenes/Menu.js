@@ -58,7 +58,7 @@ class Menu extends Phaser.Scene {
         this.add.text(game.config.width/2, game.config.height/2, 'HOW DANDY', menuConfig).setOrigin(0.5, 2.5);
         this.add.text(game.config.width/2, game.config.height/2, 'Press D to start', startConfig).setOrigin(0.5,-1.5);
         this.add.text(game.config.width/2, game.config.height/2, '>Use mouse to control Dandy<', keyConfig).setOrigin(0.5,2);
-        this.add.text(game.config.width/2, game.config.height/2, '>Press space to drop seed<', keyConfig).setOrigin(0.5,1);
+        this.add.text(game.config.width/2, game.config.height/2, '>Press space to drop seed<', keyConfig).setOrigin(0.5,0.8);
 
         // define keys
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
