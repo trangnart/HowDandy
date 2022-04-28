@@ -19,7 +19,7 @@ class Menu extends Phaser.Scene {
     create() {
         // menu text configuration
         let menuConfig = {
-            fontFamily: 'Papyrus',
+            fontFamily: 'Yoster',
             fontSize: '80px',
             color: '#B4E197',
             align: 'right',
@@ -31,7 +31,7 @@ class Menu extends Phaser.Scene {
         }
 
         let keyConfig = {
-            fontFamily: 'Papyrus',
+            fontFamily: 'Yoster',
             fontSize: '30px',
             color: '#417D7A',
             align: 'right',
@@ -43,7 +43,7 @@ class Menu extends Phaser.Scene {
         }
 
         let startConfig = {
-            fontFamily: 'Papyrus',
+            fontFamily: 'Yoster',
             fontSize: '30px',
             backgroundColor: '#066163',
             color: '#CDBE78',

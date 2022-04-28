@@ -5,6 +5,7 @@ let config = {
     height: 720,
     scene: [Menu, Play], // the scenes we will be using
     object_delay: 100,
+    autoCenter: true,
 
     // phaser arcade physic engine
     physics: {

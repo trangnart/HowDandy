@@ -2,9 +2,9 @@ let gameOptions = {
     platformStartSpeed: 350
 }
 let gameConfig = {
-    fontFamily: 'Papyrus',
+    fontFamily: 'Yoster',
     fontSize: '40px',
-    color: '#FFFFFF',
+    color: '#000000',
     align: 'right',
     padding: {
         top: 5,
@@ -26,10 +26,12 @@ class Play extends Phaser.Scene {
         this.load.image('seed', './assets/placeHolder_seed.png');
         this.load.image('water', './assets/ground_water.png');
         this.load.image('ground', './assets/ground_grass.png');
-        this.load.image('wind', './assets/placeHolder_clickWind.png');
         this.load.image('sky', './assets/sky.png');
         this.load.image('bird', './assets/bird.png');
         this.load.image('power_up_seed', './assets/placeHolder_seed.png');
+        this.load.image('outsideBar', './assets/barContainer.png');
+        this.load.image('timerBar', './assets/bar.png');
+        this.load.image('bar', './assets/blackbar.png');
     }
 
     create () {
@@ -45,28 +47,28 @@ class Play extends Phaser.Scene {
         // this.grass = this.group.create(0, 700, 'ground_grass');
         // this.add.tileSprite(0, 700, 1280, 118, "ground").setOrigin(0,0);
         let dropConfig = {
-            fontFamily: 'Papyrus',
-            fontSize: '20px',
-            backgroundColor: '#89CFF0',
-            color: '#FF0000',
+            fontFamily: 'Yoster',
+            fontSize: '18px',
+            //backgroundColor: '#89CFF0',
+            color: '#FFFFFF',
             align: 'left',
             padding: {
-                top: 10,
-                bottom: 5,
+                top: 7,
+                bottom: 7,
             },
             fixedWidth: 200
         }
 
 
         let windConfig = {
-            fontFamily: 'Papyrus',
-            fontSize: '20px',
-            backgroundColor: '#89CFF0',
-            color: '#FF0000',
+            fontFamily: 'Yoster',
+            fontSize: '18px',
+            //backgroundColor: '#89CFF0',
+            color: '#FFFFFF',
             align: 'left',
             padding: {
-                top: 10,
-                bottom: 5,
+                top: 7,
+                bottom: 7,
             },
             fixedWidth: 200
         }
@@ -90,15 +92,11 @@ class Play extends Phaser.Scene {
         this.dropCoolDown = 0;
         this.windCoolDown = 0;
 
-        // bar dropCoolDown
-        // this.barDrop = this.add.text(borderUISize - borderPadding + 700, borderUISize -40, this.dropText, dropConfig);
-        // this.dropText = this.add.text(745, 20, "Drop countdown:");
-        this.dropTimer = this.add.text(750, 15, "Drop Cooldown: " + this.dropCoolDown, dropConfig);
-
-        // bar windCoolDown
-        // this.barWind = this.add.text(borderUISize - borderPadding + 1000, borderUISize - 40, this.windText, windConfig);
-        // this.windText = this.add.text(1045, 20, "Wind countdown:");
-        this.windTimer = this.add.text(1045, 15, "Wind Cooldown: " + this.windCoolDown, windConfig);
+        // UI bar
+        this.bar = this.physics.add.sprite(640, -5, 'bar');
+        this.bar.body.immovable = true;
+        this.bar.body.allowGravity = false;
+        this.bar.alpha = 0.5;
 
         // defining keys
         keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -152,17 +150,31 @@ class Play extends Phaser.Scene {
         this.seed_power.body.immovable = true;
         this.seed_power.body.allowGravity = false;
 
+        this.add.text(60,17, "SCORE: ", {fontFamily: 'Yoster', fontSize: '18px'});
+        this.playerScore = this.add.text(140, 17, this.score, {fontFamily: 'Yoster', fontSize: '18px'});
+        this.add.text(480,17, "DISTANCE:", {fontFamily: 'Yoster', fontSize: '18px'});
+        this.distanceText = this.add.text(585, 17, this.distanceTraveled + ' ft', {fontFamily: 'Yoster', fontSize: '18px'});
+        this.add.text(260,17, "SEEDS: ", {fontFamily: 'Yoster', fontSize: '18px'});
+        this.Health = this.add.text(340, 17, this.playerHealth, {fontFamily: 'Yoster', fontSize: '18px'});
 
-        this.add.text(20,20, "Score");
-        this.playerScore = this.add.text(150, 20, this.score);
-        this.add.text(500,20, "Distance");
-        this.distanceText = this.add.text(610, 20, this.distanceTraveled);
-        this.add.text(300,20, "Seeds");
-        this.Health = this.add.text(360, 20, this.playerHealth);
+        // bar dropCoolDown
+        this.dropTimer = this.add.text(750, 10, "SEED:", dropConfig);
+        // bar windCoolDown
+        this.windTimer = this.add.text(1045, 10, "WIND:", windConfig);
 
-        //this.canPlaceWind = this.add.text(game.config.width/2, game.config.height/8, "wind", {color: '#000000'}).setAlpha(0);
-        //this.canPlaceWind.color('#000000');
+        // SEED cooldown bar
+        this.seedCooldownContainer = this.add.sprite(880, 26, 'outsideBar');
+        this.seedBar = this.add.sprite(this.seedCooldownContainer.x, this.seedCooldownContainer.y, 'timerBar');
+        this.seedBarMask = this.add.sprite(this.seedCooldownContainer.x, this.seedCooldownContainer.y, 'timerBar');
+        this.seedBarMask.visible = false;
+        this.seedBar.mask = new Phaser.Display.Masks.BitmapMask(this, this.seedBarMask);
 
+        // WIND cooldown bar
+        this.windCooldownContainer = this.add.sprite(1175, 26, 'outsideBar');
+        this.windBar = this.add.sprite(this.windCooldownContainer.x, this.windCooldownContainer.y, 'timerBar');
+        this.windBarMask = this.add.sprite(this.windCooldownContainer.x, this.windCooldownContainer.y, 'timerBar');
+        this.windBarMask.visible = false;
+        this.windBar.mask = new Phaser.Display.Masks.BitmapMask(this, this.windBarMask);
 
         // COLLISION stuff below
         // add physics collider for player and ground
@@ -229,6 +241,8 @@ class Play extends Phaser.Scene {
             this.seedGroup.clear(true, true);
             console.log("inside water and seed collision");
         }, this);
+
+        this.physics.add.collider(this.player, this.bar);
 
 
     }
@@ -361,25 +375,27 @@ class Play extends Phaser.Scene {
             // while the cool down is not reset to 0, keep removing the value
             if (this.dropCoolDown > 0) {
                 this.dropCoolDown -= 1;
-                this.dropTimer.text = 'Drop Cooldown: ' + this.dropCoolDown;
+                let seedStepWidth = this.seedBarMask.displayWidth / 300;
+                this.seedBarMask.x -= seedStepWidth;
             }
             else {
-                this.dropTimer.text = 'Drop Cooldown: ✓';
+                this.seedBarMask.x = this.seedBar.x;
             }
 
             if (this.windCoolDown > 0) {
                 this.windCoolDown -= 1;
-                this.windTimer.text = 'Wind Cooldown: ' + this.windCoolDown;
+                let windStepWidth = this.windBarMask.displayWidth / 100;
+                this.windBarMask.x -= windStepWidth;
             }
             else {
-                this.windTimer.text = 'Wind Cooldown: ✓';
+                this.windBarMask.x = this.windBar.x
             }
 
             this.Health.text = this.playerHealth;
 
             // calculating distance and displaying it
             this.distanceTraveled += 0.01;
-            this.distanceText.text = this.distanceTraveled.toFixed(2);
+            this.distanceText.text = this.distanceTraveled.toFixed(2) + ' ft';
 
             // changing the terrain to water
             this.terrainRange += 0.01;
