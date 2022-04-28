@@ -234,6 +234,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.seedGroup, this.ground, null, function() {
             this.score += 100;
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
+                this.sound.play('sfx_score');
                 this.playerHealth -= 1;
             }
             this.playerScore.text = this.score;
@@ -243,6 +244,7 @@ class Play extends Phaser.Scene {
 
         this.physics.add.collider(this.seedGroup, this.water, null, function() {
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
+                this.sound.play('sfx_bloop');
                 this.playerHealth -= 1;
             }
             this.seedGroup.clear(true, true);
@@ -255,7 +257,6 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-
         // game over happens
         if (this.playerHealth <= 0 || this.gameOver == true) {
             this.birdEffect = false;
@@ -272,6 +273,7 @@ class Play extends Phaser.Scene {
 
         // restart the game
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.sound.play('sfx_select');
             this.scene.restart();
         }
 
@@ -447,6 +449,7 @@ class Play extends Phaser.Scene {
 
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
+                this.sound.play('sfx_click');
                 this.windCoolDown = 100;
                 this.windPlaced = true;
 
