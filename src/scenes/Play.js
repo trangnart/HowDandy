@@ -4,7 +4,7 @@ let gameOptions = {
 let gameConfig = {
     fontFamily: 'Yoster',
     fontSize: '40px',
-    color: '#cc3e36',
+    color: '#000000',
     align: 'right',
     padding: {
         top: 5,
@@ -22,13 +22,15 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('dandy', './assets/placeHolder_dandelion.png');
-        this.load.image('seed', './assets/placeHolder_seed.png');
+        // this.load.image('dandy', './assets/dandelion_0.gif');
+        // this.load.spritesheet('dandy', './assets/dandelion_0_spritesheet.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 60});
+        this.load.image('dandy', './assets/dandelion_0.png');
+        this.load.image('seed', './assets/seed.png');
         this.load.image('water', './assets/ground_water.png');
         this.load.image('ground', './assets/ground_grass.png');
         this.load.image('sky', './assets/sky.png');
         this.load.image('bird', './assets/bird.png');
-        this.load.image('power_up_seed', './assets/placeHolder_seed.png');
+        this.load.image('power_up_seed', './assets/seed.png');
         this.load.image('outsideBar', './assets/barContainer.png');
         this.load.image('timerBar', './assets/bar.png');
         this.load.image('bar', './assets/blackbar.png');
@@ -44,6 +46,12 @@ class Play extends Phaser.Scene {
             720,
             "sky"
         ).setOrigin(0, 0);
+        // animation config
+    this.anims.create({
+        key: 'dandy',
+        frames: this.anims.generateFrameNumbers('dandy', { start: 0, end: 16, first: 0}),
+        frameRate: 60
+      });
 
         let dropConfig = {
             fontFamily: 'Yoster',
@@ -80,7 +88,7 @@ class Play extends Phaser.Scene {
         this.windPlaced = false;
         this.terrainRange = 0; // number that will be checked
         this.distanceTraveled = 0; //distance
-
+        
         // sound effect booleans
         this.birdEffect = false;
         this.seedEffect = false;
@@ -234,7 +242,6 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.seedGroup, this.ground, null, function() {
             this.score += 100;
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
-                this.sound.play('sfx_score');
                 this.playerHealth -= 1;
             }
             this.playerScore.text = this.score;
@@ -244,7 +251,6 @@ class Play extends Phaser.Scene {
 
         this.physics.add.collider(this.seedGroup, this.water, null, function() {
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
-                this.sound.play('sfx_bloop');
                 this.playerHealth -= 1;
             }
             this.seedGroup.clear(true, true);
@@ -257,6 +263,7 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+
         // game over happens
         if (this.playerHealth <= 0 || this.gameOver == true) {
             this.birdEffect = false;
@@ -273,7 +280,6 @@ class Play extends Phaser.Scene {
 
         // restart the game
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.sound.play('sfx_select');
             this.scene.restart();
         }
 
@@ -446,10 +452,9 @@ class Play extends Phaser.Scene {
                 this.dropCoolDown = 300;
             }
 
-
+            
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
-                this.sound.play('sfx_click');
                 this.windCoolDown = 100;
                 this.windPlaced = true;
 
