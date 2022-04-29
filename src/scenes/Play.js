@@ -453,6 +453,7 @@ class Play extends Phaser.Scene {
 
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
+                this.sound.play('sfx_click');
                 this.windCoolDown = 100;
                 this.windPlaced = true;
 
