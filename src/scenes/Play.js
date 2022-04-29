@@ -36,7 +36,7 @@ class Play extends Phaser.Scene {
         this.load.image('outsideBar', './assets/barContainer.png');
         this.load.image('timerBar', './assets/bar.png');
         this.load.image('bar', './assets/blackbar.png');
-        
+
     }
 
     create () {
@@ -104,7 +104,7 @@ class Play extends Phaser.Scene {
         this.windPlaced = false;
         this.terrainRange = 0; // number that will be checked
         this.distanceTraveled = 0; //distance
-        
+
         // sound effect booleans
         this.birdEffect = false;
         this.seedEffect = false;
@@ -476,10 +476,9 @@ class Play extends Phaser.Scene {
                 this.dropCoolDown = 300;
             }
 
-            
+
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
-                this.sound.play('sfx_click');
                 this.windCoolDown = 100;
                 this.windPlaced = true;
 
