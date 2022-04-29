@@ -13,6 +13,8 @@ let gameConfig = {
     fixedWidth: 0
 }
 
+
+var bot;
 class Play extends Phaser.Scene {
 
     constructor() {
@@ -21,17 +23,20 @@ class Play extends Phaser.Scene {
 
     preload() {
         // this.load.image('dandy', './assets/dandelion_0.gif');
-        // this.load.spritesheet('dandy', './assets/dandelion_0_spritesheet.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 60});
-        this.load.image('dandy', './assets/dandelion_0.png');
-        this.load.image('seed', './assets/seed.png');
+        this.load.spritesheet('dandy', './assets/dandelion_10_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        // this.load.image('dandy', './assets/dandelion_0.png');
+        // this.load.image('seed', './assets/seed.png');
+        this.load.spritesheet('seed', './assets/seed_spritesheet.png', {frameWidth: 24, frameHeight: 29});
         this.load.image('water', './assets/ground_water.png');
         this.load.image('ground', './assets/ground_grass.png');
         this.load.image('sky', './assets/sky.png');
         this.load.image('bird', './assets/bird.png');
-        this.load.image('power_up_seed', './assets/seed.png');
+        // this.load.image('power_up_seed', './assets/seed.png');
+        this.load.spritesheet('power_up_seed', './assets/seed_spritesheet.png',{frameWidth: 24, frameHeight: 29});
         this.load.image('outsideBar', './assets/barContainer.png');
         this.load.image('timerBar', './assets/bar.png');
         this.load.image('bar', './assets/blackbar.png');
+        
     }
 
     create () {
@@ -45,10 +50,23 @@ class Play extends Phaser.Scene {
             "sky"
         ).setOrigin(0, 0);
         // animation config
-    this.anims.create({
-        key: 'dandy',
-        frames: this.anims.generateFrameNumbers('dandy', { start: 0, end: 16, first: 0}),
-        frameRate: 60
+        this.anims.create({
+        key: 'moving',
+        frames: this.anims.generateFrameNumbers('dandy'),//{start:0, end:8, first:0}
+        frameRate: 5,
+        repeat: -1
+      });
+      this.anims.create({
+        key: 'seed',
+        frames: this.anims.generateFrameNumbers('seed'),//{start:0, end:8, first:0}
+        frameRate: 5,
+        repeat: -1
+      });
+      this.anims.create({
+        key: 'seed_power',
+        frames: this.anims.generateFrameNumbers('power_up_seed'),//{start:0, end:8, first:0}
+        frameRate: 5,
+        repeat: -1
       });
 
         let dropConfig = {
@@ -86,7 +104,7 @@ class Play extends Phaser.Scene {
         this.windPlaced = false;
         this.terrainRange = 0; // number that will be checked
         this.distanceTraveled = 0; //distance
-
+        
         // sound effect booleans
         this.birdEffect = false;
         this.seedEffect = false;
@@ -112,7 +130,9 @@ class Play extends Phaser.Scene {
 
         // creating dandelion sprite
         // parameters: x pos, y pos, texture, frame
+        // this.player = this.add.sprite(config.width- 300, config.height/3, 'dandy', 0);
         this.player = this.physics.add.sprite(config.width-300, config.height/3, 'dandy',0);
+        this.player.play({key:'moving'});
         this.player.setGravityY(70); // gravity strength. 70 is good
         this.player.setBounce(0.85);
         this.player.setCollideWorldBounds(true);
@@ -154,6 +174,8 @@ class Play extends Phaser.Scene {
 
         //seed power up
         this.seed_power = this.physics.add.sprite(0, -100, 'power_up_seed',0);
+        this.seed_power.play({key:'seed'});
+        this.seed_power.setScale(2);
         this.seed_power.body.setAllowGravity(false);
         this.seed_power.body.immovable = true;
         this.seed_power.body.allowGravity = false;
@@ -283,6 +305,8 @@ class Play extends Phaser.Scene {
 
         // game loop
         if (this.gameOver != true) {
+            // this.player.anims.play("moving");
+            // this.player.play("moving");
 
             if (this.birdEffect == true) {
                 this.sound.play('sfx_bird');
@@ -444,13 +468,15 @@ class Play extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(keySpace) && this.dropCoolDown <= 0) {
                 this.sound.play('sfx_drop');
                 this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed');
+                this.seed.play({key:'seed'});
+                this.seed.setScale(2);
                 this.seed.setGravityY(135);
                 this.seed.body.velocity.y= 500;
                 this.seedGroup.add(this.seed);
                 this.dropCoolDown = 300;
             }
 
-
+            
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 this.windCoolDown = 100;
