@@ -15,9 +15,15 @@ class Menu extends Phaser.Scene {
     this.load.audio('sfx_bloop', './assets/bloop.wav');
     this.load.audio('sfx_score', './assets/score.wav');
     this.load.audio('sfx_click', './assets/click.wav');
+    this.load.audio('musicaudio', 'assets/background piano.mp3');
     }
 
     create() {
+        // background music
+        var music = this.sound.add('musicaudio');
+        music.setLoop(true);
+        music.play();
+
         // menu text configuration
         this.add.image(0,0, "bg").setOrigin(0).setDepth(0);
         let menuConfig = {

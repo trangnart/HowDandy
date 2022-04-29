@@ -1,4 +1,3 @@
-
 let config = {
     type: Phaser.AUTO,
     width: 1280,          // game resolution rn is 720p

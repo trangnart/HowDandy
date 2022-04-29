@@ -13,8 +13,6 @@ let gameConfig = {
     fixedWidth: 0
 }
 
-
-var bot;
 class Play extends Phaser.Scene {
 
     constructor() {
@@ -88,7 +86,7 @@ class Play extends Phaser.Scene {
         this.windPlaced = false;
         this.terrainRange = 0; // number that will be checked
         this.distanceTraveled = 0; //distance
-        
+
         // sound effect booleans
         this.birdEffect = false;
         this.seedEffect = false;
@@ -452,7 +450,7 @@ class Play extends Phaser.Scene {
                 this.dropCoolDown = 300;
             }
 
-            
+
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 this.windCoolDown = 100;
