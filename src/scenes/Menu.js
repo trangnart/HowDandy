@@ -22,11 +22,6 @@ class Menu extends Phaser.Scene {
     create() {
         this.add.image(0,0, "bg").setOrigin(0).setDepth(0);
 
-        // background music
-        var music = this.sound.add('musicaudio');
-        music.setLoop(true);
-        music.play();
-
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Yoster',
@@ -64,6 +59,10 @@ class Menu extends Phaser.Scene {
     }
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyS)) {
+            // background music
+            var music = this.sound.add('musicaudio');
+            music.setLoop(true);
+            music.play();
             // Novice mode
             this.sound.play('sfx_select');
             this.scene.start("playScene");
