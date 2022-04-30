@@ -28,7 +28,7 @@ class Play extends Phaser.Scene {
         this.load.image('water', './assets/ground_water.png');
         this.load.image('ground', './assets/ground_grass.png');
         this.load.image('sky', './assets/sky.png');
-        this.load.image('bird', './assets/bird_spritesheet.png', {frameWidth: 110, frameHeight: 90});
+        this.load.image('bird', './assets/frame2.png', {frameWidth: 110, frameHeight: 90});
         // this.load.image('power_up_seed', './assets/seed.png');
         this.load.spritesheet('power_up_seed', './assets/seed_spritesheet.png',{frameWidth: 24, frameHeight: 29});
         this.load.image('outsideBar', './assets/barContainer.png');
@@ -66,12 +66,13 @@ class Play extends Phaser.Scene {
         frameRate: 5,
         repeat: -1
       });
+      /*
       this.anims.create({
         key: 'flying',
         frames: this.anims.generateFrameNumbers('bird'), // bird animation
         frameRate: 2,
         repeat: -1
-      });
+      }); */
 
         let dropConfig = {
             fontFamily: 'Yoster',
@@ -169,7 +170,7 @@ class Play extends Phaser.Scene {
 
         //bird
         this.incoming_bird = this.physics.add.sprite(0,-100, 'bird',0);
-        this.seed_power.play({key:'flying'});  // add bird animation
+        //this.seed_power.play({key:'flying'});  // add bird animation
         this.incoming_bird.body.setAllowGravity(false);
         this.incoming_bird.body.immovable = true;
         this.incoming_bird.body.allowGravity = false;
