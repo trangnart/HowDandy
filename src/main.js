@@ -1,9 +1,8 @@
-
 let config = {
     type: Phaser.AUTO,
     width: 1280,          // game resolution rn is 720p
     height: 720,
-    scene: [Menu, Play], // the scenes we will be using
+    scene: [Menu, Play, Guide], // the scenes we will be using
     object_delay: 100,
     autoCenter: true,
 
@@ -25,4 +24,4 @@ let borderPadding = borderUISize / 3;
 
 // reserving relevant keys
 let keySpace, keyEnter;
-let keyD, keyR;
+let keyS, keyR, keyI, keyM;

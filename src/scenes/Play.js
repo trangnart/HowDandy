@@ -4,7 +4,7 @@ let gameOptions = {
 let gameConfig = {
     fontFamily: 'Yoster',
     fontSize: '40px',
-    color: '#000000',
+    color: '#dc2f02',
     align: 'right',
     padding: {
         top: 5,
@@ -13,8 +13,6 @@ let gameConfig = {
     fixedWidth: 0
 }
 
-
-var bot;
 class Play extends Phaser.Scene {
 
     constructor() {
@@ -72,7 +70,6 @@ class Play extends Phaser.Scene {
         let dropConfig = {
             fontFamily: 'Yoster',
             fontSize: '18px',
-            //backgroundColor: '#89CFF0',
             color: '#FFFFFF',
             align: 'left',
             padding: {
@@ -85,7 +82,6 @@ class Play extends Phaser.Scene {
         let windConfig = {
             fontFamily: 'Yoster',
             fontSize: '18px',
-            //backgroundColor: '#89CFF0',
             color: '#FFFFFF',
             align: 'left',
             padding: {
@@ -260,6 +256,7 @@ class Play extends Phaser.Scene {
 
         // seed and terrain collision
         this.physics.add.collider(this.seedGroup, this.ground, null, function() {
+            this.sound.play('sfx_score');
             this.score += 100;
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
                 this.playerHealth -= 1;
@@ -270,7 +267,9 @@ class Play extends Phaser.Scene {
         }, this);
 
         this.physics.add.collider(this.seedGroup, this.water, null, function() {
+
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
+                this.sound.play('sfx_bloop');
                 this.playerHealth -= 1;
             }
             this.seedGroup.clear(true, true);
@@ -479,6 +478,7 @@ class Play extends Phaser.Scene {
 
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
+                this.sound.play('sfx_click');
                 this.windCoolDown = 100;
                 this.windPlaced = true;
 
