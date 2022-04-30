@@ -4,7 +4,7 @@ let gameOptions = {
 let gameConfig = {
     fontFamily: 'Yoster',
     fontSize: '40px',
-    color: '#dc2f02',
+    color: '#00000',
     align: 'right',
     padding: {
         top: 5,
@@ -20,17 +20,30 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        // this.load.image('dandy', './assets/dandelion_0.gif');
+        // player spritesheets
         this.load.spritesheet('dandy', './assets/dandelion_10_spritesheet.png', {frameWidth: 36, frameHeight: 94});
-        // this.load.image('dandy', './assets/dandelion_0.png');
-        // this.load.image('seed', './assets/seed.png');
-        this.load.spritesheet('seed', './assets/seed_spritesheet.png', {frameWidth: 24, frameHeight: 29});
+        this.load.spritesheet('dandy_9', './assets/dandelion_9_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy_8', './assets/dandelion_8_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy_7', './assets/dandelion_7_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy_6', './assets/dandelion_6_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy_5', './assets/dandelion_5_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy_4', './assets/dandelion_4_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy_3', './assets/dandelion_3_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy_2', './assets/dandelion_2_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy_1', './assets/dandelion_1_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.image('dandy_0', './assets/dandelion_0.png');
+
+        // terrain and background
         this.load.image('water', './assets/ground_water.png');
         this.load.image('ground', './assets/ground_grass.png');
         this.load.image('sky', './assets/sky.png');
+
+        // seed, bird and power up assets
+        this.load.spritesheet('seed', './assets/seed_spritesheet.png', {frameWidth: 24, frameHeight: 29});
         this.load.spritesheet('bird', './assets/bird_spritesheet.png', {frameWidth: 110, frameHeight: 90});
-        // this.load.image('power_up_seed', './assets/seed.png');
         this.load.spritesheet('power_up_seed', './assets/seed_spritesheet.png',{frameWidth: 24, frameHeight: 29});
+
+        // bar cooldown assets
         this.load.image('outsideBar', './assets/barContainer.png');
         this.load.image('timerBar', './assets/bar.png');
         this.load.image('bar', './assets/blackbar.png');
@@ -48,24 +61,86 @@ class Play extends Phaser.Scene {
             "sky"
         ).setOrigin(0, 0);
         // animation config
+        // dandy with 10 seeds
         this.anims.create({
-        key: 'moving',
-        frames: this.anims.generateFrameNumbers('dandy'),//{start:0, end:8, first:0}
-        frameRate: 5,
-        repeat: -1
-      });
-      this.anims.create({
-        key: 'seed',
-        frames: this.anims.generateFrameNumbers('seed'),//{start:0, end:8, first:0}
-        frameRate: 5,
-        repeat: -1
-      });
+            key: 'moving',
+            frames: this.anims.generateFrameNumbers('dandy'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'moving_9',
+            frames: this.anims.generateFrameNumbers('dandy_9'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'moving_8',
+            frames: this.anims.generateFrameNumbers('dandy_8'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'moving_7',
+            frames: this.anims.generateFrameNumbers('dandy_7'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'moving_6',
+            frames: this.anims.generateFrameNumbers('dandy_6'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'moving_5',
+            frames: this.anims.generateFrameNumbers('dandy_5'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'moving_4',
+            frames: this.anims.generateFrameNumbers('dandy_4'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'moving_3',
+            frames: this.anims.generateFrameNumbers('dandy_3'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'moving_2',
+            frames: this.anims.generateFrameNumbers('dandy_2'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'moving_1',
+            frames: this.anims.generateFrameNumbers('dandy_1'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+
+        
+
+
+      // seed animation
+        this.anims.create({
+            key: 'seed',
+            frames: this.anims.generateFrameNumbers('seed'),//{start:0, end:8, first:0}
+            frameRate: 5,
+            repeat: -1
+        });
+      // seed power up animation
       this.anims.create({
         key: 'seed_power',
         frames: this.anims.generateFrameNumbers('power_up_seed'),//{start:0, end:8, first:0}
         frameRate: 5,
         repeat: -1
       });
+      // bird animation
       this.anims.create({
         key: 'flying',
         frames: this.anims.generateFrameNumbers('bird'),//{start:0, end:8, first:0}
@@ -73,12 +148,7 @@ class Play extends Phaser.Scene {
         repeat: -1
       });
       
-    //   this.anims.create({
-    //     key: 'flying',
-    //     frames: this.anims.generateFrameNumbers('bird'), // bird animation
-    //     frameRate: 1,
-    //     repeat: -1
-    //   });
+    
 
         let dropConfig = {
             fontFamily: 'Yoster',
@@ -146,6 +216,7 @@ class Play extends Phaser.Scene {
         this.player.setBounce(0.85);
         this.player.setCollideWorldBounds(true);
         this.player.setVelocity(1,1);
+        this.player.setScale(0.8);
 
         // seed group
         this.seedGroup = this.physics.add.group({
@@ -185,7 +256,7 @@ class Play extends Phaser.Scene {
         //seed power up
         this.seed_power = this.physics.add.sprite(0, -100, 'power_up_seed',0);
         this.seed_power.play({key:'seed'});
-        this.seed_power.setScale(2);
+        this.seed_power.setScale(1.7);
         this.seed_power.body.setAllowGravity(false);
         this.seed_power.body.immovable = true;
         this.seed_power.body.allowGravity = false;
@@ -239,7 +310,6 @@ class Play extends Phaser.Scene {
 
         //add physics collider with bird
         this.physics.add.overlap(this.player, this.incoming_bird, null, function(){
-            //this.sound.play('sfx_bird');
             if (this.playerHealth <= 10 && this.playerHealth >= 0) {
                 this.playerHealth -= 1;
                 this.Health.text = this.playerHealth;
@@ -252,12 +322,11 @@ class Play extends Phaser.Scene {
                 this.gameOver = true;
                 return;
             }
-            console.log('inside bird collision');
+            //console.log('inside bird collision');
         },this);
 
         //add physics collider with seed power up
         this.physics.add.overlap(this.player, this.seed_power, null, function(){
-            //this.sound.play('sfx_powerup');
             if(this.playerHealth <= 9) {
                 this.playerHealth += 1;
             }
@@ -265,13 +334,13 @@ class Play extends Phaser.Scene {
             this.object_moving = false;
             this.call_object = config.object_delay;
             this.seedEffect = true;
-            console.log('inside powerup collision');
+            //console.log('inside powerup collision');
         },this);
 
         // seed and terrain collision
         this.physics.add.collider(this.seedGroup, this.ground, null, function() {
             this.sound.play('sfx_score');
-            this.score += 100;
+            this.score += 200;
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
                 this.playerHealth -= 1;
             }
@@ -290,8 +359,11 @@ class Play extends Phaser.Scene {
             console.log("inside water and seed collision");
         }, this);
 
+        // player and UI bar collision
         this.physics.add.collider(this.player, this.bar);
 
+        // highscore variable
+        // window.localStorage.setItem('highscore', 0);
 
     }
 
@@ -303,9 +375,19 @@ class Play extends Phaser.Scene {
             this.seedEffect = false;
             this.playerHealth  = 0;
             this.Health.text = this.playerHealth;
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameConfig).setOrigin(0.5,2);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press R to Restart', gameConfig).setOrigin(0.5,1);
+            this.add.text(game.config.width/2, game.config.height/2-20, 'GAME OVER', gameConfig).setOrigin(0.5,2);
+            
+            let totalScore = this.score + (Math.round(this.distanceTraveled)*2);
+            if (totalScore >= window.localStorage.getItem('highscore')) {
+                window.localStorage.setItem('highscore', totalScore);
+            }
+
+            this.add.text(game.config.width/2, game.config.height/2+27, 'TOTAL SCORE: ' + totalScore, gameConfig).setOrigin(0.5,2);;
+            this.add.text(game.config.width/2, game.config.height/2 + 70, 'HIGH SCORE: ' + window.localStorage.getItem('highscore'), gameConfig).setOrigin(0.5,2);;
+            this.add.text(game.config.width/2, game.config.height/2 + 65, 'Press R to Restart', gameConfig).setOrigin(0.5,1);
             this.gameOver = true;
+
+            // stop player movement when game is over
             this.player.body.physics = false;
             this.player.body.setBounce(0);
             this.player.body.gravity = false;
@@ -318,8 +400,38 @@ class Play extends Phaser.Scene {
 
         // game loop
         if (this.gameOver != true) {
-            // this.player.anims.play("moving");
             // this.player.play("moving");
+
+            // if (this.playerHealth == 10) {
+            //     this.player.play({key:'moving'});
+            // }
+            if (this.playerHealth == 9) {
+                this.player.play({key:'moving_9'});
+            }
+            else if (this.playerHealth == 8) {
+                this.player.play({key:'moving_8'});
+            }
+            else if (this.playerHealth == 7) {
+                this.player.play({key:'moving_7'});
+            }
+            else if (this.playerHealth == 6) {
+                this.player.play({key:'moving_6'});
+            }
+            else if (this.playerHealth == 5) {
+                this.player.play({key:'moving_5'});
+            }
+            else if (this.playerHealth == 4) {
+                this.player.play({key:'moving_4'});
+            }
+            else if (this.playerHealth == 3) {
+                this.player.play({key:'moving_3'});
+            }
+            else if (this.playerHealth == 2) {
+                this.player.play({key:'moving_2'});
+            }
+            else if (this.playerHealth == 1) {
+                this.player.play({key:'moving_1'});
+            }
 
             if (this.birdEffect == true) {
                 this.sound.play('sfx_bird');
@@ -482,7 +594,7 @@ class Play extends Phaser.Scene {
                 this.sound.play('sfx_drop');
                 this.seed = this.physics.add.sprite(this.player.x, this.player.y, 'seed');
                 this.seed.play({key:'seed'});
-                this.seed.setScale(2);
+                this.seed.setScale(1.7);
                 this.seed.setGravityY(135);
                 this.seed.body.velocity.y= 500;
                 this.seedGroup.add(this.seed);
