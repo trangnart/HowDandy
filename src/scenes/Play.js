@@ -40,9 +40,9 @@ class Play extends Phaser.Scene {
         this.load.image('sky', './assets/sky.png');
 
         // seed, bird and power up assets
-        this.load.spritesheet('seed', './assets/seed_spritesheet.png', {frameWidth: 24, frameHeight: 29});
+        this.load.spritesheet('seed', './assets/seed_spritesheet.png', {frameWidth: 22, frameHeight: 25});
         this.load.spritesheet('bird', './assets/bird_spritesheet.png', {frameWidth: 110, frameHeight: 90});
-        this.load.spritesheet('power_up_seed', './assets/seed_spritesheet.png',{frameWidth: 24, frameHeight: 29});
+        this.load.spritesheet('power_up_seed', './assets/seed_spritesheet.png',{frameWidth: 22, frameHeight: 25});
 
         // bar cooldown assets
         this.load.image('outsideBar', './assets/barContainer.png');
@@ -134,14 +134,14 @@ class Play extends Phaser.Scene {
         this.anims.create({
             key: 'seed',
             frames: this.anims.generateFrameNumbers('seed'),//{start:0, end:8, first:0}
-            frameRate: 5,
+            frameRate: 8,
             repeat: -1
         });
       // seed power up animation
       this.anims.create({
         key: 'seed_power',
         frames: this.anims.generateFrameNumbers('power_up_seed'),//{start:0, end:8, first:0}
-        frameRate: 5,
+        frameRate: 8,
         repeat: -1
       });
       // bird animation
@@ -421,54 +421,56 @@ class Play extends Phaser.Scene {
             // console.log(this.player.currentAnim);
             // this.player.on('animationcomplete', function(){console.log("awdf");})
 
-            if(this.player.on('moving_10', function(){this.animationPlay = true;})) {
-                this.animationPlay = true;
-                console.log("tiddies");
-            }
+        // this.player.on('animationcomplete', function(){this.animationPlay = true; console.log(this.animationPlay);}) 
+                // this.animationPlay = true;
+                // console.log("tiddies");
+            
           
-                if(this.playerHealth == 10 && this.animationPlay == true){
-                        this.animationPlay = false;
-                         this.player.play({key:'moving_10'});
-                         console.log("ass");
+            //     if(this.playerHealth == 10 && this.animationPlay == true){
+            //             this.animationPlay = false;
+            //              this.player.play({key:'moving_10'});
+            //              console.log("ass");
 
-                    // console.log(this.playerHealth +" "+ this.animationPlay);
-                     // this.player.play({key:'moving_10'});
+            //         // console.log(this.playerHealth +" "+ this.animationPlay);
+            //          // this.player.play({key:'moving_10'});
     
-                // this.player.on('animationcomplete', function(){
-                //     this.animationPlay = false;
-                //     console.log("word");
-                // })
+            //     // this.player.on('animationcomplete', function(){
+            //     //     this.animationPlay = false;
+            //     //     console.log("word");
+            //     // })
 
+            // }
+            if(this.playerHealth == 10) {
+                this.player.play({key:'moving_10'});
             }
-
-            // else if(this.playerHealth == 9) {
-            //     this.player.play({key:'moving_9'});
-            // }
-            // else if(this.playerHealth == 8) {
-            //     this.player.play({key:'moving_8'});
-            // }
-            // else if(this.playerHealth == 7) {
-            //     this.player.play({key:'moving_7'});
-            // }
-            // else if(this.playerHealth == 6) {
-            //     this.player.play({key:'moving_6'});
-            // }
-            // else if(this.playerHealth == 5) {
-            //     this.player.play({key:'moving_5'});
-            // }
-            // else if(this.playerHealth == 4) {
-            //     this.player.play({key:'moving_4'});
-            // }
-            // else if(this.playerHealth == 3) {
-            //     this.player.play({key:'moving_3'});
-            // }
-            // else if(this.playerHealth == 2) {
-            //     this.player.play({key:'moving_2'});
-            // }
-            // else if(this.playerHealth == 1) {
-            //     this.player.play({key:'moving_1'});
-            // }
-            // this.player.play("moving");
+            else if(this.playerHealth == 9) {
+                this.player.play({key:'moving_9'});
+            }
+            else if(this.playerHealth == 8) {
+                this.player.play({key:'moving_8'});
+            }
+            else if(this.playerHealth == 7) {
+                this.player.play({key:'moving_7'});
+            }
+            else if(this.playerHealth == 6) {
+                this.player.play({key:'moving_6'});
+            }
+            else if(this.playerHealth == 5) {
+                this.player.play({key:'moving_5'});
+            }
+            else if(this.playerHealth == 4) {
+                this.player.play({key:'moving_4'});
+            }
+            else if(this.playerHealth == 3) {
+                this.player.play({key:'moving_3'});
+            }
+            else if(this.playerHealth == 2) {
+                this.player.play({key:'moving_2'});
+            }
+            else if(this.playerHealth == 1) {
+                this.player.play({key:'moving_1'});
+            }
+            this.player.play("moving");
 
             // if (this.playerHealth == 10) {
             //     this.player.play({key:'moving'});
@@ -598,8 +600,8 @@ class Play extends Phaser.Scene {
             }
 
             if(this.object_moving == true) {
-                this.seed_power.x += 5;
-                this.incoming_bird.x += 5;
+                this.seed_power.x += 7;
+                this.incoming_bird.x += 7;
                 // console.log(this.incoming_bird.x);
                 if(this.incoming_bird.x >= config.width || this.seed_power.x >= config.width) {
                     this.object_moving = false;
@@ -651,9 +653,10 @@ class Play extends Phaser.Scene {
             }
             // the range has to stay like this but the values can change if that makes sense
             if (this.terrainRange >= 5 && this.terrainRange <= 30.8) {
-
-                this.ground.x += 0.5;
-                this.water.x += 0.5;
+                this.ground.tilePositionX += 4; // move the ground
+                this.water.tilePositionX += 2;
+                this.ground.x += 5;
+                this.water.x += 5;
             }
 
             // when player presses space a seed drops
