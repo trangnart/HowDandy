@@ -47,6 +47,7 @@ class Play extends Phaser.Scene {
         this.load.image('outsideBar', './assets/barContainer.png');
         this.load.image('timerBar', './assets/bar.png');
         this.load.image('bar', './assets/blackbar.png');
+        this.load.spritesheet('wind', './assets/wind_spritesheet.png', {frameWidth: 73, frameHeight: 37, startFrame:0, endFrame:9});
 
     }
 
@@ -146,6 +147,13 @@ class Play extends Phaser.Scene {
         frames: this.anims.generateFrameNumbers('bird'),//{start:0, end:8, first:0}
         frameRate: 5,
         repeat: -1
+      });
+      //wind animation
+      this.anims.create({
+        key: 'blow',
+        frames: this.anims.generateFrameNumbers('wind'),//{start:0, end:8, first:0}
+        frameRate: 8,
+        repeat: 0
       });
       
     
@@ -313,7 +321,11 @@ class Play extends Phaser.Scene {
             if (this.playerHealth <= 10 && this.playerHealth >= 0) {
                 this.playerHealth -= 1;
                 this.Health.text = this.playerHealth;
-                this.incoming_bird.y = -100;
+                this.object_moving = false;
+                this.incoming_bird.x = 0;
+                this.incoming_bird.y = -200;
+                this.seed_power.x =  0;
+                this.seed_power.y = -200;
                 this.object_moving = false;
                 this.call_object = config.object_delay;
                 this.birdEffect = true;
@@ -330,7 +342,10 @@ class Play extends Phaser.Scene {
             if(this.playerHealth <= 9) {
                 this.playerHealth += 1;
             }
-            this.seed_power.y = -100;
+            this.incoming_bird.x = 0;
+            this.incoming_bird.y = -200;
+            this.seed_power.y =  0;
+            this.seed_power.y = -200;
             this.object_moving = false;
             this.call_object = config.object_delay;
             this.seedEffect = true;
@@ -605,6 +620,8 @@ class Play extends Phaser.Scene {
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 this.sound.play('sfx_click');
+                this.wind = this.add.sprite(this.input.x, this.input.y, 'wind');
+                this.wind.play({key:'blow'});
                 this.windCoolDown = 100;
                 this.windPlaced = true;
 
