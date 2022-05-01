@@ -327,10 +327,9 @@ class Play extends Phaser.Scene {
                 this.Health.text = this.playerHealth;
                 this.object_moving = false;
                 this.incoming_bird.x = 0;
-                this.incoming_bird.y = -200;
+                this.incoming_bird.y = -100;//-200
                 this.seed_power.x =  0;
-                this.seed_power.y = -200;
-                this.object_moving = false;
+                this.seed_power.y = -100;//-200
                 this.call_object = config.object_delay;
                 this.birdEffect = true;
             }
@@ -346,11 +345,11 @@ class Play extends Phaser.Scene {
             if(this.playerHealth <= 9) {
                 this.playerHealth += 1;
             }
-            this.incoming_bird.x = 0;
-            this.incoming_bird.y = -200;
-            this.seed_power.y =  0;
-            this.seed_power.y = -200;
             this.object_moving = false;
+            this.incoming_bird.x = 0;
+            this.incoming_bird.y = -100;
+            this.seed_power.x =  0;
+            this.seed_power.y = -100;
             this.call_object = config.object_delay;
             this.seedEffect = true;
             //console.log('inside powerup collision');
@@ -421,25 +420,26 @@ class Play extends Phaser.Scene {
         if (this.gameOver != true) {
             // console.log(this.player.currentAnim);
             // this.player.on('animationcomplete', function(){console.log("awdf");})
-            // this.player.on('animationcomplete', function(){this.animationPlay = true; console.log(this.playerHealth +" "+this.animationPlay)});
+
+            if(this.player.on('moving_10', function(){this.animationPlay = true;})) {
+                this.animationPlay = true;
+                console.log("tiddies");
+            }
           
+                if(this.playerHealth == 10 && this.animationPlay == true){
+                        this.animationPlay = false;
+                         this.player.play({key:'moving_10'});
+                         console.log("ass");
 
-            //     if(this.playerHealth == 10){
-            //         console.log("piss");
-            //          if(this.animationPlay == false) {
-            //             this.animationPlay = true;
-            //              this.player.play({key:'moving_10'});
-            //              console.log("ass");
+                    // console.log(this.playerHealth +" "+ this.animationPlay);
+                     // this.player.play({key:'moving_10'});
+    
+                // this.player.on('animationcomplete', function(){
+                //     this.animationPlay = false;
+                //     console.log("word");
+                // })
 
-            //         // console.log(this.playerHealth +" "+ this.animationPlay);
-            //          // this.player.play({key:'moving_10'});
-            //     }
-            //     this.player.on('animationcomplete', function(){
-            //         this.animationPlay = false;
-            //         console.log("word");
-            //     })
-
-            // }
+            }
 
             // else if(this.playerHealth == 9) {
             //     this.player.play({key:'moving_9'});
@@ -603,8 +603,8 @@ class Play extends Phaser.Scene {
                 // console.log(this.incoming_bird.x);
                 if(this.incoming_bird.x >= config.width || this.seed_power.x >= config.width) {
                     this.object_moving = false;
-                    this.incoming_bird.y = -100;
-                    this.seed_power.y = -100;
+                    this.incoming_bird.y = -100;//-200
+                    this.seed_power.y = -100;//-200
                     this.incoming_bird.x = 0;
                     this.seed_power.x = 0;
                 this.call_object = config.object_delay;
