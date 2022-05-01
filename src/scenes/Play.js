@@ -21,7 +21,7 @@ class Play extends Phaser.Scene {
 
     preload() {
         // player spritesheets
-        this.load.spritesheet('dandy', './assets/dandelion_10_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy_10', './assets/dandelion_10_spritesheet.png', {frameWidth: 36, frameHeight: 94});
         this.load.spritesheet('dandy_9', './assets/dandelion_9_spritesheet.png', {frameWidth: 36, frameHeight: 94});
         this.load.spritesheet('dandy_8', './assets/dandelion_8_spritesheet.png', {frameWidth: 36, frameHeight: 94});
         this.load.spritesheet('dandy_7', './assets/dandelion_7_spritesheet.png', {frameWidth: 36, frameHeight: 94});
@@ -31,6 +31,7 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('dandy_3', './assets/dandelion_3_spritesheet.png', {frameWidth: 36, frameHeight: 94});
         this.load.spritesheet('dandy_2', './assets/dandelion_2_spritesheet.png', {frameWidth: 36, frameHeight: 94});
         this.load.spritesheet('dandy_1', './assets/dandelion_1_spritesheet.png', {frameWidth: 36, frameHeight: 94});
+        this.load.spritesheet('dandy', './assets/dandelion_spritesheet.png', {frameWidth: 36, frameHeight: 94});
         this.load.image('dandy_0', './assets/dandelion_0.png');
 
         // terrain and background
@@ -63,63 +64,65 @@ class Play extends Phaser.Scene {
         ).setOrigin(0, 0);
         // animation config
         // dandy with 10 seeds
+        
+
         this.anims.create({
-            key: 'moving',
-            frames: this.anims.generateFrameNumbers('dandy'),//{start:0, end:8, first:0}
+            key: 'moving_10',
+            frames: this.anims.generateFrameNumbers('dandy', {start:0, end:8}),//{start:0, end:8, first:0}
             frameRate: 5,
-            repeat: -1
+            repeat: 0
         });
         this.anims.create({
             key: 'moving_9',
-            frames: this.anims.generateFrameNumbers('dandy_9'),//{start:0, end:8, first:0}
+            frames: this.anims.generateFrameNumbers('dandy',{start:9, end:17}),//{start:0, end:8, first:0}
             frameRate: 5,
             repeat: -1
         });
         this.anims.create({
             key: 'moving_8',
-            frames: this.anims.generateFrameNumbers('dandy_8'),//{start:0, end:8, first:0}
+            frames: this.anims.generateFrameNumbers('dandy',{start:18, end:26}),//{start:0, end:8, first:0}
             frameRate: 5,
             repeat: -1
         });
         this.anims.create({
             key: 'moving_7',
-            frames: this.anims.generateFrameNumbers('dandy_7'),//{start:0, end:8, first:0}
+            frames: this.anims.generateFrameNumbers('dandy',{start:27, end:36}),//{start:0, end:8, first:0}
             frameRate: 5,
             repeat: -1
         });
         this.anims.create({
             key: 'moving_6',
-            frames: this.anims.generateFrameNumbers('dandy_6'),//{start:0, end:8, first:0}
+            frames: this.anims.generateFrameNumbers('dandy',{start:37, end:45}),//{start:0, end:8, first:0}
             frameRate: 5,
             repeat: -1
         });
         this.anims.create({
             key: 'moving_5',
-            frames: this.anims.generateFrameNumbers('dandy_5'),//{start:0, end:8, first:0}
+            frames: this.anims.generateFrameNumbers('dandy',{start:46, end:54}),//{start:0, end:8, first:0}
             frameRate: 5,
             repeat: -1
         });
         this.anims.create({
             key: 'moving_4',
-            frames: this.anims.generateFrameNumbers('dandy_4'),//{start:0, end:8, first:0}
+            frames: this.anims.generateFrameNumbers('dandy',{start:55, end:63}),//{start:0, end:8, first:0}
             frameRate: 5,
             repeat: -1
         });
         this.anims.create({
             key: 'moving_3',
-            frames: this.anims.generateFrameNumbers('dandy_3'),//{start:0, end:8, first:0}
+            frames: this.anims.generateFrameNumbers('dandy',{start:64, end:72}),//{start:0, end:8, first:0}
             frameRate: 5,
             repeat: -1
         });
         this.anims.create({
             key: 'moving_2',
-            frames: this.anims.generateFrameNumbers('dandy_2'),//{start:0, end:8, first:0}
+            frames: this.anims.generateFrameNumbers('dandy',{start:73, end:81}),//{start:0, end:8, first:0}
             frameRate: 5,
             repeat: -1
         });
         this.anims.create({
             key: 'moving_1',
-            frames: this.anims.generateFrameNumbers('dandy_1'),//{start:0, end:8, first:0}
+            frames: this.anims.generateFrameNumbers('dandy',{start:82, end:90}),//{start:0, end:8, first:0}
             frameRate: 5,
             repeat: -1
         });
@@ -219,7 +222,8 @@ class Play extends Phaser.Scene {
         // parameters: x pos, y pos, texture, frame
         // this.player = this.add.sprite(config.width- 300, config.height/3, 'dandy', 0);
         this.player = this.physics.add.sprite(config.width-300, config.height/3, 'dandy',0);
-        this.player.play({key:'moving'});
+        this.player.play({key:'moving_10'});
+        // this.player.animations.play('dandy_10');
         this.player.setGravityY(70); // gravity strength. 70 is good
         this.player.setBounce(0.85);
         this.player.setCollideWorldBounds(true);
@@ -379,7 +383,7 @@ class Play extends Phaser.Scene {
 
         // highscore variable
         // window.localStorage.setItem('highscore', 0);
-
+        this.animationPlay = false;
     }
 
     update() {
@@ -415,38 +419,87 @@ class Play extends Phaser.Scene {
 
         // game loop
         if (this.gameOver != true) {
+            // console.log(this.player.currentAnim);
+            // this.player.on('animationcomplete', function(){console.log("awdf");})
+            // this.player.on('animationcomplete', function(){this.animationPlay = true; console.log(this.playerHealth +" "+this.animationPlay)});
+          
+
+            //     if(this.playerHealth == 10){
+            //         console.log("piss");
+            //          if(this.animationPlay == false) {
+            //             this.animationPlay = true;
+            //              this.player.play({key:'moving_10'});
+            //              console.log("ass");
+
+            //         // console.log(this.playerHealth +" "+ this.animationPlay);
+            //          // this.player.play({key:'moving_10'});
+            //     }
+            //     this.player.on('animationcomplete', function(){
+            //         this.animationPlay = false;
+            //         console.log("word");
+            //     })
+
+            // }
+
+            // else if(this.playerHealth == 9) {
+            //     this.player.play({key:'moving_9'});
+            // }
+            // else if(this.playerHealth == 8) {
+            //     this.player.play({key:'moving_8'});
+            // }
+            // else if(this.playerHealth == 7) {
+            //     this.player.play({key:'moving_7'});
+            // }
+            // else if(this.playerHealth == 6) {
+            //     this.player.play({key:'moving_6'});
+            // }
+            // else if(this.playerHealth == 5) {
+            //     this.player.play({key:'moving_5'});
+            // }
+            // else if(this.playerHealth == 4) {
+            //     this.player.play({key:'moving_4'});
+            // }
+            // else if(this.playerHealth == 3) {
+            //     this.player.play({key:'moving_3'});
+            // }
+            // else if(this.playerHealth == 2) {
+            //     this.player.play({key:'moving_2'});
+            // }
+            // else if(this.playerHealth == 1) {
+            //     this.player.play({key:'moving_1'});
+            // }
             // this.player.play("moving");
 
             // if (this.playerHealth == 10) {
             //     this.player.play({key:'moving'});
             // }
-            if (this.playerHealth == 9) {
-                this.player.play({key:'moving_9'});
-            }
-            else if (this.playerHealth == 8) {
-                this.player.play({key:'moving_8'});
-            }
-            else if (this.playerHealth == 7) {
-                this.player.play({key:'moving_7'});
-            }
-            else if (this.playerHealth == 6) {
-                this.player.play({key:'moving_6'});
-            }
-            else if (this.playerHealth == 5) {
-                this.player.play({key:'moving_5'});
-            }
-            else if (this.playerHealth == 4) {
-                this.player.play({key:'moving_4'});
-            }
-            else if (this.playerHealth == 3) {
-                this.player.play({key:'moving_3'});
-            }
-            else if (this.playerHealth == 2) {
-                this.player.play({key:'moving_2'});
-            }
-            else if (this.playerHealth == 1) {
-                this.player.play({key:'moving_1'});
-            }
+            // if (this.playerHealth == 9) {
+            //     this.player.play({key:'moving_9'});
+            // }
+            // else if (this.playerHealth == 8) {
+            //     this.player.play({key:'moving_8'});
+            // }
+            // else if (this.playerHealth == 7) {
+            //     this.player.play({key:'moving_7'});
+            // }
+            // else if (this.playerHealth == 6) {
+            //     this.player.play({key:'moving_6'});
+            // }
+            // else if (this.playerHealth == 5) {
+            //     this.player.play({key:'moving_5'});
+            // }
+            // else if (this.playerHealth == 4) {
+            //     this.player.play({key:'moving_4'});
+            // }
+            // else if (this.playerHealth == 3) {
+            //     this.player.play({key:'moving_3'});
+            // }
+            // else if (this.playerHealth == 2) {
+            //     this.player.play({key:'moving_2'});
+            // }
+            // else if (this.playerHealth == 1) {
+            //     this.player.play({key:'moving_1'});
+            // }
 
             if (this.birdEffect == true) {
                 this.sound.play('sfx_bird');
@@ -621,6 +674,8 @@ class Play extends Phaser.Scene {
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
                 this.sound.play('sfx_click');
                 this.wind = this.add.sprite(this.input.x, this.input.y, 'wind');
+                this.wind.play({key:'blow'});
+                this.wind = this.add.sprite(this.input.x, this.input.y+10, 'wind');
                 this.wind.play({key:'blow'});
                 this.windCoolDown = 100;
                 this.windPlaced = true;
