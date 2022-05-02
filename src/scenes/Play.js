@@ -4,7 +4,7 @@ let gameOptions = {
 let gameConfig = {
     fontFamily: 'Yoster',
     fontSize: '40px',
-    color: '#00000',
+    color: '#ff0000',
     align: 'right',
     padding: {
         top: 5,
@@ -79,7 +79,7 @@ class Play extends Phaser.Scene {
         ).setOrigin(0, 0);
         // animation config
         // dandy with 10 seeds
-        
+
 
         // this.anims.create({
         //     key: 'moving_10',
@@ -142,7 +142,7 @@ class Play extends Phaser.Scene {
         //     repeat: -1
         // });
 
-        
+
 
 
       // seed animation
@@ -185,7 +185,7 @@ class Play extends Phaser.Scene {
         frameRate: 8,
         repeat: 0
       });
-      
+
         let dropConfig = {
             fontFamily: 'Yoster',
             fontSize: '18px',
@@ -383,7 +383,7 @@ class Play extends Phaser.Scene {
             this.score += 200;
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
                 this.playerHealth -= 1;
-               
+
             }
             //this.seed_plant = this.add.sprite(500, 642, 'seed_grow', 0);
             //this.seed_plant.setScale(3)
@@ -415,7 +415,7 @@ class Play extends Phaser.Scene {
             this.playerHealth  = 0;
             this.Health.text = this.playerHealth;
             this.add.text(game.config.width/2, game.config.height/2-20, 'GAME OVER', gameConfig).setOrigin(0.5,2);
-            
+
             let totalScore = this.score + (Math.round(this.distanceTraveled)*2);
             if (totalScore >= window.localStorage.getItem('highscore')) {
                 window.localStorage.setItem('highscore', totalScore);
@@ -440,7 +440,7 @@ class Play extends Phaser.Scene {
         // game loop
         if (this.gameOver != true) {
 
-        // this.player.on('animationcomplete', function(){this.animationPlay = true; console.log(this.animationPlay);}) 
+        // this.player.on('animationcomplete', function(){this.animationPlay = true; console.log(this.animationPlay);})
                 // this.animationPlay = true;
                 // console.log("tiddies");
             //     if(this.playerHealth == 10 && this.animationPlay == true){
@@ -480,7 +480,7 @@ class Play extends Phaser.Scene {
                 this.player.setTexture('dandy_1');
             }
 
-            
+
 
             if (this.birdEffect == true) {
                 this.sound.play('sfx_bird');
