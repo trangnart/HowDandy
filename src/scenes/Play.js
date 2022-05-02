@@ -212,7 +212,7 @@ class Play extends Phaser.Scene {
 
         // mouse stuff
         this.input.mouse.capture = true;
-        this.input.setDefaultCursor('url(./assets/placeHolder_windMouse.png), pointer');
+        this.input.setDefaultCursor('url(./assets/wind_cursor.png), pointer');
 
         this.gameOver = false; // to tell if game is over or not
         this.seedDroppped = false;
@@ -336,7 +336,7 @@ class Play extends Phaser.Scene {
                 this.playerHealth -= 1;
                 this.Health.text = this.playerHealth;
             }
-            console.log('inside ground collision');
+            //console.log('inside ground collision');
         },this);
 
         // player and water collision
@@ -361,7 +361,6 @@ class Play extends Phaser.Scene {
                 this.gameOver = true;
                 return;
             }
-            //console.log('inside bird collision');
         },this);
 
         //add physics collider with seed power up
@@ -376,10 +375,9 @@ class Play extends Phaser.Scene {
             this.seed_power.y = -100;
             this.call_object = config.object_delay;
             this.seedEffect = true;
-            //console.log('inside powerup collision');
         },this);
 
-        // seed and terrain collision
+        // seed and ground collision
         this.physics.add.collider(this.seedGroup, this.ground, null, function() {
             this.sound.play('sfx_score');
             this.score += 200;
@@ -387,11 +385,11 @@ class Play extends Phaser.Scene {
                 this.playerHealth -= 1;
                
             }
-            this.seed_plant = this.add.sprite(this.seedGroup.x, this.seedGroup.y, 'bird', 0);
-            this.seed_plant.play({key:'flying'});
+            //this.seed_plant = this.add.sprite(500, 642, 'seed_grow', 0);
+            //this.seed_plant.setScale(3)
+            //this.seed_plant.play({key:'seed_growing'});
             this.playerScore.text = this.score;
             this.seedGroup.clear(true, true);
-            //console.log("inside ground and seed collision");
         }, this);
 
         // seed and water collision
@@ -401,13 +399,11 @@ class Play extends Phaser.Scene {
                 this.playerHealth -= 1;
             }
             this.seedGroup.clear(true, true);
-            //console.log("inside water and seed collision");
         }, this);
 
         // player and UI bar collision
         this.physics.add.collider(this.player, this.bar);
 
-        //this.animationPlay = false;
     }
 
     update() {
@@ -488,6 +484,7 @@ class Play extends Phaser.Scene {
 
             if (this.birdEffect == true) {
                 this.sound.play('sfx_bird');
+                this.sound.setVolume(0.3);
                 this.birdEffect = false;
             }
             else if (this.seedEffect == true) {
@@ -504,9 +501,6 @@ class Play extends Phaser.Scene {
             if(this.call_object <= 0 && this.object_moving == false) {
                this.call_random_number = Math.floor(Math.random() * 5);
                this.call_random_object = Math.floor(Math.random() * 2);
-               //console.log("random number =",this.call_random_number);
-               //console.log("call number =",this.call_random_object);
-               //this.call_object = config.object_delay;
 
                if(this.call_random_number==0 && this.call_random_object == 0){
                    this.incoming_bird.x = 14;
@@ -583,9 +577,8 @@ class Play extends Phaser.Scene {
             }
 
             if(this.object_moving == true) {
-                this.seed_power.x += 6;
-                this.incoming_bird.x += 6;
-                // console.log(this.incoming_bird.x);
+                this.seed_power.x += 7;
+                this.incoming_bird.x += 7;
                 if(this.incoming_bird.x >= config.width || this.seed_power.x >= config.width) {
                     this.object_moving = false;
                     this.incoming_bird.y = -100;//-200
@@ -593,8 +586,6 @@ class Play extends Phaser.Scene {
                     this.incoming_bird.x = 0;
                     this.seed_power.x = 0;
                 this.call_object = config.object_delay;
-                    // console.log(this.incoming_bird.x);
-                    // console.log(this.incoming_bird.y);
                 }
             }
 
@@ -635,11 +626,11 @@ class Play extends Phaser.Scene {
                 this.terrainRange = -10;
             }
             // the range has to stay like this but the values can change if that makes sense
-            if (this.terrainRange >= 15 && this.terrainRange <= 40.8) {
+            if (this.terrainRange >= 20 && this.terrainRange <= 45.8) {
                 this.ground.tilePositionX += 4; // move the ground
                 this.water.tilePositionX += 2;
-                this.ground.x += 2;
-                this.water.x += 2;
+                this.ground.x += 5;
+                this.water.x += 5;
             }
 
             // when player presses space a seed drops
@@ -683,14 +674,14 @@ class Play extends Phaser.Scene {
                     this.player.body.velocity.y = -50;
                     console.log("go to the right bc mouse is next to");
                 }
-                else if (this.player.y < this.mouseY && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 170)) {
-                    this.player.body.velocity.x = -30;
-                    this.player.body.velocity.y = -180; // negative y values go up
+                else if (this.player.y < this.mouseY && (this.xRange >= 0 && this.xRange <= 60) && (this.yRange >= 0 && this.yRange <= 170)) {
+                    this.player.body.velocity.x = -20;
+                    this.player.body.velocity.y = -195; // negative y values go up
                     console.log("go up bc mouse is below");
                 }
-                else if (this.player.y > this.mouseY && (this.xRange >= 0 && this.xRange <= 80) && (this.yRange >= 0 && this.yRange <= 170)){
-                    this.player.body.velocity.x = -60;
-                    this.player.body.velocity.y = 125;  // positive y values go down
+                else if (this.player.y > this.mouseY && (this.xRange >= 0 && this.xRange <= 60) && (this.yRange >= 0 && this.yRange <= 170)){
+                    this.player.body.velocity.x = -20;
+                    this.player.body.velocity.y = 135;  // positive y values go down
                     console.log("go down bc mouse is above");
                 }
 
