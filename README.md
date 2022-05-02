@@ -1,4 +1,4 @@
-## Game title: How Dandy
+## Game title: How Dandy - Endless Runner
 
 ### Collaborators:
 - Andrew Dresel-Kurtz
@@ -6,3 +6,9 @@
 - Ashley Perez
 
 ### Date completed:
+
+5/2/2022
+
+### Link to play game:
+
+https://trangnart.github.io/HowDandy/
