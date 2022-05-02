@@ -162,7 +162,7 @@ class Play extends Phaser.Scene {
             key: 'seed_growing_c',
             frames: this.anims.generateFrameNumbers('seed_grow',{start:7, end:8}),//{start:0, end:8, first:0}
             frameRate: 10,
-            repeat: -1
+            repeat: 5
         });
       // seed power up animation
       this.anims.create({
@@ -376,22 +376,6 @@ class Play extends Phaser.Scene {
             this.call_object = config.object_delay;
             this.seedEffect = true;
         },this);
-
-        // seed and ground collision
-        this.physics.add.collider(this.seedGroup, this.ground, null, function() {
-            this.sound.play('sfx_score');
-            this.score += 200;
-            if (this.playerHealth >= 0 && this.playerHealth <= 10) {
-                this.playerHealth -= 1;
-
-            }
-            //this.seed_plant = this.add.sprite(500, 642, 'seed_grow', 0);
-            //this.seed_plant.setScale(3)
-            //this.seed_plant.play({key:'seed_growing'});
-            this.playerScore.text = this.score;
-            this.seedGroup.clear(true, true);
-        }, this);
-
         // seed and water collision
         this.physics.add.collider(this.seedGroup, this.water, null, function() {
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
@@ -440,6 +424,20 @@ class Play extends Phaser.Scene {
         // game loop
         if (this.gameOver != true) {
 
+             // seed and ground collision
+        this.physics.add.collider(this.seedGroup, this.ground, null, function() {
+            this.sound.play('sfx_score');
+            this.score += 200;
+            if (this.playerHealth >= 0 && this.playerHealth <= 10) {
+                this.playerHealth -= 1;
+            }
+            this.plantFlower(this.seed);
+           
+            this.playerScore.text = this.score;
+            this.seedGroup.clear(true, true);
+        }, this);
+
+
         // this.player.on('animationcomplete', function(){this.animationPlay = true; console.log(this.animationPlay);})
                 // this.animationPlay = true;
                 // console.log("tiddies");
@@ -483,8 +481,8 @@ class Play extends Phaser.Scene {
 
 
             if (this.birdEffect == true) {
-                this.sound.play('sfx_bird');
-                this.sound.setVolume(0.3);
+                this.sound.play('sfx_bird', {volume: 0.3});
+                // this.sound.setVolume(0.3);
                 this.birdEffect = false;
             }
             else if (this.seedEffect == true) {
@@ -537,7 +535,6 @@ class Play extends Phaser.Scene {
                 this.call_random_number = -1;
                 this.call_random_object = -1;
             }
-
             else if(this.call_random_number==0 && this.call_random_object == 1){
                 this.seed_power.x = 14;
                 this.seed_power.y = 101;
@@ -646,6 +643,8 @@ class Play extends Phaser.Scene {
                 this.dropCoolDown = 300;
             }
 
+        
+
 
             // moving the dandelion
             if (this.input.activePointer.isDown && this.windCoolDown <= 0) {
@@ -691,6 +690,24 @@ class Play extends Phaser.Scene {
 
 
     }
+    plantFlower(seeds) {
+                
+        let flower = this.add.sprite(seeds.x, seeds.y, 'seed_grow').setOrigin(0, 0);
+        flower.y += 4;
+        // flower.velocity.y= -500;
+        flower.setScale(3);
+        flower.play({key:'seed_growing'});
+        flower.on('animationcomplete', () => {    
+            flower.play({key:'seed_growing_c'});
+            flower.on('animationcomplete', () => {    
+                flower.destroy();
+              });
+          });
+          if (this.terrainRange >= 20 && this.terrainRange <= 45.8) {
+            flower.destroy();
+          }
+          
 
+        }
 
-}
+    }
