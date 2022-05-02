@@ -41,6 +41,7 @@ class Play extends Phaser.Scene {
 
         // seed, bird and power up assets
         this.load.spritesheet('seed', './assets/seed_spritesheet.png', {frameWidth: 22, frameHeight: 25});
+        this.load.spritesheet('seed_grow', './assets/seed_growing.png', {frameWidth: 11, frameHeight: 8});
         this.load.spritesheet('bird', './assets/bird_spritesheet.png', {frameWidth: 110, frameHeight: 90});
         this.load.spritesheet('power_up_seed', './assets/seed_spritesheet.png',{frameWidth: 22, frameHeight: 25});
 
@@ -135,6 +136,18 @@ class Play extends Phaser.Scene {
             key: 'seed',
             frames: this.anims.generateFrameNumbers('seed'),//{start:0, end:8, first:0}
             frameRate: 8,
+            repeat: -1
+        });
+        // seed growing animation
+        this.anims.create({
+            key: 'seed_growing',
+            frames: this.anims.generateFrameNumbers('seed_grow'),//{start:0, end:8, first:0}
+            frameRate: 6,
+        });
+        this.anims.create({
+            key: 'seed_growing_c',
+            frames: this.anims.generateFrameNumbers('seed_grow',{start:7, end:8}),//{start:0, end:8, first:0}
+            frameRate: 10,
             repeat: -1
         });
       // seed power up animation
@@ -361,7 +374,10 @@ class Play extends Phaser.Scene {
             this.score += 200;
             if (this.playerHealth >= 0 && this.playerHealth <= 10) {
                 this.playerHealth -= 1;
+               
             }
+            this.seed_plant = this.add.sprite(this.seedGroup.x, this.seedGroup.y, 'bird', 0);
+            this.seed_plant.play({key:'flying'});
             this.playerScore.text = this.score;
             this.seedGroup.clear(true, true);
             console.log("inside ground and seed collision");
@@ -425,7 +441,6 @@ class Play extends Phaser.Scene {
                 // this.animationPlay = true;
                 // console.log("tiddies");
             
-          
             //     if(this.playerHealth == 10 && this.animationPlay == true){
             //             this.animationPlay = false;
             //              this.player.play({key:'moving_10'});
