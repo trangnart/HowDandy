@@ -4,7 +4,7 @@ let gameOptions = {
 let gameConfig = {
     fontFamily: 'Yoster',
     fontSize: '40px',
-    color: '#ff0000',
+    color: '#e22030',
     align: 'right',
     padding: {
         top: 5,
