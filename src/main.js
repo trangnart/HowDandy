@@ -1,3 +1,11 @@
+// HOW DANDY - Endless Runner
+// TEAM MEMBERS: Andrew Dresel-Kurtz, Ashley Perez, Jane Tran
+// Date Complete:
+// 
+// Creative:
+//
+// Visual:
+
 let config = {
     type: Phaser.AUTO,
     width: 1280,          // game resolution rn is 720p
