@@ -5,7 +5,6 @@
 // Technical Interesting: The randomization for the bird and power up object.
 // Visual: The theme of the game is really solid where the objective of the game is "true to life" and all the art follows a similar retro aesthetic.
 
-
 let config = {
     type: Phaser.AUTO,
     width: 1280,          // game resolution rn is 720p
